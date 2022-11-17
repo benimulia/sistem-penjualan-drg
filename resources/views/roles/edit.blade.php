@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('content')
 <div class="row">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Edit Role</h2>
         </div>
-        <div class="pull-right">
+        <div class="pull-right mb-4">
             <a class="btn btn-primary" href="{{ route('roles.index') }}"> Back</a>
         </div>
     </div>
@@ -30,6 +30,10 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
+            <div class="row ml-0 mb-2">
+                <a class="btn btn-info mr-2" onclick="selects()">Select All</a>
+                <a class="btn btn-dark" onclick="deSelect()">Deselect All</a>
+            </div>
             <strong>Permission:</strong>
             <br />
             @foreach($permission as $value)
@@ -45,4 +49,25 @@
 </div>
 {!! Form::close() !!}
 @endsection
-<p class="text-center text-primary"><small>Tutorial by LaravelTuts.com</small></p>
+
+@section('footer-script')
+<script type="text/javascript">
+    function selects() {
+        var ele = document.getElementsByName('permission[]');
+        for (var i = 0; i < ele.length; i++) {
+            if (ele[i].type == 'checkbox')
+                ele[i].checked = true;
+        }
+    }
+
+    function deSelect() {
+        var ele = document.getElementsByName('permission[]');
+        for (var i = 0; i < ele.length; i++) {
+            if (ele[i].type == 'checkbox')
+                ele[i].checked = false;
+
+        }
+    }
+</script>
+
+@endsection

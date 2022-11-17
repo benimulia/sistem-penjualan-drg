@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('content')
 <div class="row">
     <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
+        <div class="pull-left mb-4">
             <h2>Role Management</h2>
         </div>
-        <div class="pull-right">
+        <div class="pull-right mb-2">
             @can('role-create')
             <a class="btn btn-success" href="{{ route('roles.create') }}"> Create New Role</a>
             @endcan
@@ -13,8 +13,15 @@
     </div>
 </div>
 @if ($message = Session::get('success'))
-<div class="alert alert-success">
-    <p>{{ $message }}</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Success!</strong> {{ $message }}
+            </div>
+        </div>
+    </div>
 </div>
 @endif
 <table class="table table-bordered">
@@ -34,8 +41,8 @@
             <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
             @endcan
             @can('role-delete')
-            {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
-            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+            {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline','onsubmit' => "return ConfirmDelete('Please confirm you want to delete! {{ $role->name }}')"]) !!}
+            {!! Form::submit('Delete', ['class' => 'btn btn-danger', 'data-confirm' => "Are you sure to delete this item?"]) !!}
             {!! Form::close() !!}
             @endcan
         </td>
@@ -43,5 +50,15 @@
     @endforeach
 </table>
 {!! $roles->render() !!}
-<p class="text-center text-primary"><small>Tutorial by LaravelTuts.com</small></p>
+@endsection
+
+@section('footer-script')
+<script type="text/javascript">
+    var ctext = 'Confirm you want to Delete ? \n'
+
+    function ConfirmDelete() {
+
+        return confirm(ctext);
+    };
+</script>
 @endsection
