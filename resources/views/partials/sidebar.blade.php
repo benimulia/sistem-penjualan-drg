@@ -38,7 +38,7 @@
     @can('cabang-list')
     <li class="nav-item {{ (request()->is('cabang*')) ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('cabang.index') }}">
-            <i class="fas fa-fw fa-box"></i>
+            <i class="fas fa-fw fa-code-branch"></i>
             <span>Cabang</span>
         </a>
     </li>

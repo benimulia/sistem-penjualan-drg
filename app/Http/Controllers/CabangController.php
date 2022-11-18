@@ -60,82 +60,30 @@ class CabangController extends Controller
 
     public function update($id, Request $request)
     {
-        $berita = Cabang::find($id);
-
 
         try {
-
-            $jdlBerita = strval($request->judulBerita);
-            $beritaIdentifier = str_replace(" ", "-", $jdlBerita);
-            $beritaDb = strval($berita->judul_berita);
-
-            if ($jdlBerita != $beritaDb) {
-                $cariIdentifier = DB::table('beritas')->where('berita_identifier', '=', $beritaIdentifier)->pluck('berita_identifier');
-                $counter = 1;
-                while ($cariIdentifier->count() > 0) {
-                    $beritaIdentifier = str_replace(" ", "-", $jdlBerita) . $counter;
-                    $counter++;
-
-                    $cariIdentifier = DB::table('beritas')->where('berita_identifier', '=', $beritaIdentifier)->pluck('berita_identifier');
-                }
-                $counter = 1;
-            } else {
-                $beritaIdentifier = $berita->berita_identifier;
-            }
-
-
-            $gambar = $berita->gambar_berita;
-            if ($request->gambarBerita != null) {
-                if ($gambar != null) {
-                    $file = public_path('/gambarBerita/') . $gambar;
-                    if (file_exists($file)) {
-                        unlink($file);
-                    }
-                }
-
-                $nameImage = time() . "-" . $request->gambarBerita->getClientOriginalName();
-                $request->gambarBerita->move(public_path() . '/gambarBerita', $nameImage);
-            } else {
-                $nameImage = $gambar;
-            }
-        } catch (Exception $e) {
-            return redirect('/adminku/berita')->with('fail', 'Gagal construct data. Silahkan coba lagi');
-        }
-
-
-        try {
-            DB::table('beritas')->where('id', $id)->update([
-                'berita_identifier' => $beritaIdentifier,
-                'judul_berita' => $request->judulBerita,
-                'gambar_berita' => $nameImage,
-                'tgl_berita' => $request->tglBerita,
-                'isi_berita' => $request->isiBerita,
-                'penulis_berita' => $request->penulisBerita,
-                'updated_at' => Carbon::now('+07:00')
+            DB::table('cabang')->where('id_cabang', $id)->update([
+                'nama_cabang' => $request->nama_cabang,
+                'kategori' => $request->kategori,
+                'alamat_cabang' => $request->alamat_cabang,
+                'tgl_buka' => $request->tgl_buka,
+                'updated_at' => Carbon::now()
             ]);
-            return redirect('/adminku/berita')->with('success', 'Berhasil mengedit data');
+            return redirect()->route('cabang.index')->with('success', 'Berhasil mengedit data');
         } catch (Exception $e) {
-            return redirect('/adminku/berita')->with('fail', 'Gagal mengedit data. Silahkan coba lagi');
+            return redirect()->route('cabang.edit')->with('fail', 'Gagal mengedit data. Silahkan coba lagi');
         }
     }
 
     public function destroy($id)
     {
-        $berita = Cabang::find($id);
+        $cabang = Cabang::find($id);
 
         try {
-            $gambar = $berita->gambar_berita;
-            if ($gambar != null) {
-                $file = public_path('/gambarBerita/') . $gambar;
-                if (file_exists($file)) {
-                    unlink($file);
-                }
-            }
-
-            $berita->delete();
-            return redirect('/adminku/berita')->with('success', 'Berhasil menghapus data');
+            $cabang->delete();
+            return redirect()->route('cabang.index')->with('success', 'Berhasil menghapus data');
         } catch (Exception $e) {
-            return redirect('/adminku/berita')->with('fail', 'Gagal menghapus data. Silahkan coba lagi');
+            return redirect()->route('cabang.index')->with('fail', 'Gagal menghapus data. Silahkan coba lagi');
         }
     }
 }
