@@ -3,10 +3,9 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-briefcase"></i>
+        <div class="sidebar-brand-icon rotate-n-10">
+            <img src="{{asset('assets/img/header/logo/landapp-logo.png')}}" style="max-width: 120px;" alt="">
         </div>
-        <div class="sidebar-brand-text mx-3">DRG </div>
     </a>
 
     <!-- Divider -->
@@ -40,6 +39,15 @@
         <a class="nav-link" href="{{ route('cabang.index') }}">
             <i class="fas fa-fw fa-code-branch"></i>
             <span>Cabang</span>
+        </a>
+    </li>
+    @endcan
+
+    @can('pelanggan-list')
+    <li class="nav-item {{ (request()->is('pelanggan*')) ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('pelanggan.index') }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Pelanggan</span>
         </a>
     </li>
     @endcan
