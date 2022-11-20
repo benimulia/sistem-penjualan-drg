@@ -99,7 +99,7 @@
             <div class="form-group">
                 <label for="foto_identitas">Upload foto identitas :</label> <br>
                 <div class="custom-file">
-                    <input type="file" class="identitas-custom-file-input" id="foto_identitas" name="foto_identitas" accept=".jpg,.jpeg,.png" required />
+                    <input type="file" class="custom-file-input" id="foto_identitas" name="foto_identitas" accept=".jpg,.jpeg,.png" required />
                     <label class="custom-file-label" for="foto_identitas">Masukkan foto identitas</label>
                 </div>
                 <div>

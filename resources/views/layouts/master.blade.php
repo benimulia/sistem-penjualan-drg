@@ -18,8 +18,9 @@
     <!-- Custom styles for this template-->
     <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
 
-    @yield('head-script')
+
     @yield('style')
+    @yield('head-script')
 
 </head>
 
@@ -44,6 +45,16 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
+                    @if(auth()->user()->id_cabang != 0 )
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
+                        <h5>Sistem Pengelolaan Stok Cabang {{auth()->user()->cabang->nama_cabang}}</h5>
+                    </div>
+                    @else
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
+                        <h5>Sistem Pengelolaan Stok Seluruh Cabang DRG</h5>
+                    </div>
+                    @endif
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -53,7 +64,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">halo, {{auth()->user()->name;}} </span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">halo, {{auth()->user()->name}} </span>
                                 <img class="img-profile rounded-circle" src="{{ asset('img/undraw_profile.svg')}}">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -115,7 +126,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="{{ route('logout') }}" onclick="event.preventDefault();
+                    <a class="btn btn-danger" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
                     </a>

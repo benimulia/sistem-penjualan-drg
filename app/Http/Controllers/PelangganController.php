@@ -22,7 +22,7 @@ class PelangganController extends Controller
 
     public function index()
     {
-        $pelanggan = Pelanggan::orderBy('created_at', 'desc')->get();
+        $pelanggan = Pelanggan::latest()->get();
         return view('pelanggan.index', compact('pelanggan'), [
             "title" => "List Pelanggan"
         ]);

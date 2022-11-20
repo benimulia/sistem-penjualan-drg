@@ -46,7 +46,7 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block">
-                                <img src="{{asset('img/login-img.png')}}" style="height: 465px; weight: 447px" alt="">
+                                <img src="{{asset('img/login-img.jpg')}}" style="height: 450px;width: 460px;" alt="">
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">

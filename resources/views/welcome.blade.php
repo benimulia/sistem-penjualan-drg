@@ -47,7 +47,7 @@
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="#">
-                            <img class="image" src="assets/img/header/logo/landapp-logo.png" alt="">
+                            <img class="image" src="assets/img/header/logo/login-landapp-logo.png" alt="">
                         </a>
                     </div>
                 </nav>

@@ -29,6 +29,9 @@
 
 <div class="row">
     <div class="col-sm-12 col-md-12">
+        <div class="pull-left">
+            <h2>Edit Pelanggan </h2>
+        </div>
         <nav aria-label="breadcrumb" role="navigation">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
@@ -197,7 +200,7 @@
 
     function enableInput() {
         var inputs = document.getElementsByClassName('form-control');
-        for(var i = 0; i < inputs.length; i++) {
+        for (var i = 0; i < inputs.length; i++) {
             inputs[i].disabled = false;
         }
         $("#btnUpdate").css("display", "");

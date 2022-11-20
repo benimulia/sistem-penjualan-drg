@@ -4,7 +4,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
         <div class="sidebar-brand-icon rotate-n-10">
-            <img src="{{asset('assets/img/header/logo/landapp-logo.png')}}" style="max-width: 120px;" alt="">
+            <img src="{{asset('assets/img/header/logo/landapp-logo.png')}}" style="max-height: 60px;" alt="">
         </div>
     </a>
 
@@ -24,21 +24,20 @@
         </a>
     </li>
 
-
-    @can('product-list')
-    <li class="nav-item {{ (request()->is('products*')) ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('products.index') }}">
-            <i class="fas fa-fw fa-box"></i>
-            <span>Product</span>
-        </a>
-    </li>
-    @endcan
-
     @can('cabang-list')
     <li class="nav-item {{ (request()->is('cabang*')) ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('cabang.index') }}">
             <i class="fas fa-fw fa-code-branch"></i>
             <span>Cabang</span>
+        </a>
+    </li>
+    @endcan
+
+    @can('produk-list')
+    <li class="nav-item {{ (request()->is('produk*')) ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('produk.index') }}">
+            <i class="fas fa-fw fa-box"></i>
+            <span>Produk</span>
         </a>
     </li>
     @endcan
@@ -51,7 +50,6 @@
         </a>
     </li>
     @endcan
-
 
     @can(['role-list','user-list'])
     <!-- Divider -->

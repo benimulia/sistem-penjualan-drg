@@ -29,6 +29,9 @@
 
 <div class="row">
     <div class="col-sm-12 col-md-12">
+        <div class="pull-left">
+            <h2>Edit Cabang </h2>
+        </div>
         <nav aria-label="breadcrumb" role="navigation">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
@@ -45,7 +48,7 @@
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        <form name="beritaForm" action="{{ route('cabang.update',['id' => $cabang->id_cabang]) }}" class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
+        <form name="cabangForm" action="{{ route('cabang.update',['id' => $cabang->id_cabang]) }}" class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id_cabang" id="id_cabang">
             @csrf
             <div class="form-group">
@@ -58,8 +61,8 @@
                 <label for="kategori">Kategori :</label>
                 <div class="w-100"></div>
                 <select class="form-control" id="kategori" name="kategori" disabled=true required>
-                    <option value="Pakan" {{ ($cabang->kategori=="Pakan")? "selected" : "" }} >Pakan</option>
-                    <option value="Telur" {{ ($cabang->kategori=="Telur")? "selected" : "" }} >Telur</option>
+                    <option value="Pakan" {{ ($cabang->kategori=="Pakan")? "selected" : "" }}>Pakan</option>
+                    <option value="Telur" {{ ($cabang->kategori=="Telur")? "selected" : "" }}>Telur</option>
                 </select>
                 <div class="valid-feedback">
                     Looks good!
@@ -90,28 +93,28 @@
                 <a href="#myModal" id="btnUpdate" data-toggle="modal" class="btn btn-success" style="display: none;">Update </a>
             </div>
             <!-- Modal HTML -->
-            
+
 
             <div id="myModal" class="modal fade">
-                            <div class="modal-dialog modal-confirm">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-info text-light">
-                                        <h5 class="modal-title w-100">Edit Data?</h5>
-                                        <a data-dismiss="modal" class="btn btn-secondary btn-circle">
-                                            <i class="fas fa-times"></i>
-                                        </a>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Apakah anda yakin untuk mengedit data?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                        <button id="submit" type="submit" class="btn btn-success">Ya</button>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="modal-dialog modal-confirm">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-light">
+                            <h5 class="modal-title w-100">Edit Data?</h5>
+                            <a data-dismiss="modal" class="btn btn-secondary btn-circle">
+                                <i class="fas fa-times"></i>
+                            </a>
                         </div>
-        </form> 
+                        <div class="modal-body">
+                            <p>Apakah anda yakin untuk mengedit data?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button id="submit" type="submit" class="btn btn-success">Ya</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -163,6 +166,5 @@
             });
         }, false);
     })();
-
 </script>
 @endsection
