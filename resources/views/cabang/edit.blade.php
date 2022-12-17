@@ -42,9 +42,9 @@
     </div>
 </div>
 <div class="row" style="margin-bottom: 30px;">
-    <div class="col-sm-12 col-md-12">
+    <!-- <div class="col-sm-12 col-md-12">
         <button id="btnEnableEdit" class="btn btn-info" onclick="enableInput();">Edit Data</button>
-    </div>
+    </div> -->
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-12">

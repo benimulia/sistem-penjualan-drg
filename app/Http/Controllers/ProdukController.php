@@ -63,6 +63,7 @@ class ProdukController extends Controller
     {
         $cabang = Cabang::all();
         $produk = Produk::find($id);
+        //dd($cabang);
         return view('produk.edit', compact('produk','cabang'), [
             "title" => "Edit Produk"
         ]);
@@ -77,6 +78,7 @@ class ProdukController extends Controller
                 'satuan'  => $request->satuan,
                 'harga_cash'  => $request->harga_cash,
                 'harga_bon'  => $request->harga_bon,
+                'harga_beli'  => $request->harga_beli,
                 'diskon'  => $request->diskon,
                 'created_by'  => auth()->user()->name,
                 'updated_by'  => auth()->user()->name,
@@ -94,6 +96,7 @@ class ProdukController extends Controller
                 'satuan'  => $request->satuan,
                 'harga_cash'  => $request->harga_cash,
                 'harga_bon'  => $request->harga_bon,
+                'harga_beli'  => $request->harga_beli,
                 'diskon'  => $request->diskon,
                 'updated_at' => Carbon::now(),
                 'updated_by'  => auth()->user()->name,

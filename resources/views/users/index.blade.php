@@ -38,7 +38,11 @@
         <td>{{ ++$i }}</td>
         <td>{{ $user->name }}</td>
         <td>{{ $user->email }}</td>
-        <td>{{ $user->cabang }}</td>
+        @if(is_null($user->cabang))
+        <td></td>
+        @else
+        <td>{{ $user->cabang->nama_cabang }}</td>
+        @endif
         <td>
             @if(!empty($user->getRoleNames()))
             @foreach($user->getRoleNames() as $v)

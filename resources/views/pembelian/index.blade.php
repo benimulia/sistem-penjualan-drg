@@ -36,58 +36,64 @@
 
 <!-- Content Row -->
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Cabang</h1>
-<p class="mb-4">Halaman ini digunakan untuk menampilkan dan mengelola daftar cabang.</p>
+<h1 class="h3 mb-2 text-gray-800">Pembelian</h1>
+<p class="mb-4">Halaman ini digunakan untuk menampilkan dan mengelola daftar pembelian produk.</p>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Data Cabang</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Data Pembelian</h6>
     </div>
     <div class="card-body">
-        <!-- <div class="row ml-0">
-            <a href="{{route('cabang.create')}}" class="btn btn-primary btn-icon-split">
+        <div class="row ml-0">
+            <a href="{{route('pembelian.create')}}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
-                <span class="text">Tambah Cabang</span>
+                <span class="text">Tambah Pembelian Baru</span>
             </a>
-        </div> -->
+        </div>
         <div class="my-4"></div>
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th class="text-center">No</th>
-                        <th class="text-center">Nama Cabang</th>
-                        <th class="text-center">Kategori</th>
-                        <th class="text-center">Tgl Buka Cabang</th>
-                        <th class="text-center">Alamat</th>
+                        <th class="text-center" style="width:20px;">No</th>
+                        <th class="text-center">Cabang</th>
+                        <th class="text-center" style="width:120px;">Tgl Pembelian</th>
+                        <th class="text-center">Supplier</th>
+                        <th class="text-center" style="width:170px;">Total Pembelian</th>
+                        <th class="text-center" style="width:200px;">Keterangan</th>
+                        <th class="text-center">User</th>
+                        <th class="text-center" style="width:120px;">Created</th>
                         <th data-orderable="false"></th>
-                        <!-- <th data-orderable="false"></th> -->
+                        <th data-orderable="false"></th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($cabang as $index => $result)
+                    @foreach ($pembelian as $index => $result)
                     <tr>
-                        <td class="text-center">{{$index + 1}}</td>
-                        <td>{{\Illuminate\Support\Str::limit( html_entity_decode(strip_tags($result->nama_cabang)), 50 )}}</td>
-                        <td>{{$result->kategori}}</td>
-                        <td>{{date('Y-m-d', strtotime($result->tgl_buka))}}</td>
-                        <td>{{$result->alamat_cabang}}</td>
+                        <td class="text-center" style="min-width:20px">{{$index + 1}}</td>
+                        <td>{{$result->cabang->nama_cabang}}</td>
+                        <td style="min-width:120px" >{{$result->tgl_pembelian}}</td>
+                        <td>{{$result->supplier}}</td>
+                        <td style="min-width:170px">Rp {{number_format($result->total_pembelian,0,',','.') }}</td>
+                        <td style="min-width:200px">{{$result->keterangan}}</td>
+                        <td>{{$result->created_by}}</td>
+                        <td style="min-width:120px">{{$result->created_at}}</td>
                         <td class="text-center">
-                            <a href="{{ route('cabang.edit',['id' => $result->id_cabang]) }}" class="btn btn-success text-light btb-circle" id="edit-cabang">
+                            <a href="{{ route('pembelian.edit',['id' => $result->id_pembelian]) }}" class="btn btn-success text-light btb-circle" id="edit-cabang">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
-                        <!-- <td class="text-center">
-                            <a data-id="{!! $result->id_cabang !!}" data-target="#previewModal-{{ $result->id_cabang }}" data-toggle="modal" class="btn btn-danger btn-circle">
+                        <td class="text-center">
+                            <a data-id="{!! $result->id_pembelian !!}" data-target="#previewModal-{{ $result->id_pembelian }}" data-toggle="modal" class="btn btn-danger btn-circle">
                                 <i class="fas fa-trash"></i>
                             </a>
-                        </td> -->
+                        </td>
                         <!-- Modal HTML -->
-                        <!-- <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_cabang }}">
+                        <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_pembelian }}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-warning dark">
@@ -99,16 +105,17 @@
                                     </div>
                                     <div class="modal-body">
                                         <p>Apakah anda yakin untuk menghapus data? Data yang sudah dihapus tidak dapat kembali!</p>
+                                        <small>Stok produk juga akan berkurang sesuai yang tertera dalam pembelian</small>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                        <a href="{{ route('cabang.destroy',['id' => $result->id_cabang]) }}" class="btn btn-danger text-light">
+                                        <a href="{{ route('pembelian.destroy',['id' => $result->id_pembelian]) }}" class="btn btn-danger text-light">
                                             Hapus
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </tr>
                     @endforeach
                 </tbody>

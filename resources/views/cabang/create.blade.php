@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class="">
-                <a href="{{route('cabang.index')}}" class="btn btn-danger mr-2">Cancel</a>
+                <a href="{{route('cabang.index')}}" class="btn btn-danger mr-2">Batal</a>
                 <button type="submit" id="btn-save" name="btnsave" class="btn btn-primary">Submit</button>
 
             </div>

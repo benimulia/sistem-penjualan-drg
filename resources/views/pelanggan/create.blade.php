@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label for="no_hp">Nomor HP :</label>
-                <input type="number" class="form-control" id="no_hp" placeholder="Masukkan no hp.." name="no_hp" required>
+                <input type="text" class="form-control" id="no_hp" placeholder="Masukkan no hp.." name="no_hp" maxlength="13" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -118,7 +118,7 @@
 
 
             <div class="mt-4">
-                <a href="{{route('cabang.index')}}" class="btn btn-danger mr-2">Cancel</a>
+                <a href="{{route('cabang.index')}}" class="btn btn-danger mr-2">Batal</a>
                 <button type="submit" id="btn-save" name="btnsave" class="btn btn-primary">Submit</button>
 
             </div>
@@ -135,6 +135,17 @@
 
 @section('footer-script')
 <script type="text/javascript">
+    $('#no_hp').keypress(function(e) {
+        var arr = [];
+        var kk = e.which;
+
+        for (i = 48; i < 58; i++)
+            arr.push(i);
+
+        if (!(arr.indexOf(kk) >= 0))
+            e.preventDefault();
+    });
+
     $('#foto_pelanggan').on('change', function() {
         //get the file name
         var fileName = $(this).val();

@@ -53,17 +53,17 @@
     <div class="col-sm-12 col-md-12">
         <form id="produkForm" class="needs-validation" novalidate action="{{route('produk.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
-            @if(auth()->user()->cabang==1)
+            @if(auth()->user()->id_cabang==1)
             <input type="hidden" name="id_cabang" value="1">
-            @elseif(auth()->user()->cabang==2)
+            @elseif(auth()->user()->id_cabang==2)
             <input type="hidden" name="id_cabang" value="2">
-            @elseif(auth()->user()->cabang==3)
+            @elseif(auth()->user()->id_cabang==3)
             <input type="hidden" name="id_cabang" value="3">
             @else
             <div class="form-group">
                 <label for="id_cabang">Cabang :</label>
                 <div class="w-100"></div>
-                <select class="form-control select2" name="id_cabang" required>
+                <select class="form-control select2" id="id_cabang" name="id_cabang" required>
                     <option value="">Pilih Cabang</option>
                     @foreach($cabang as $result)
                     <option value="{{$result->id_cabang}}">{{$result->nama_cabang}}</option>
@@ -102,7 +102,7 @@
             <div class="form-group">
                 <label for="satuan">Satuan :</label>
                 <div class="w-100"></div>
-                <select class="form-control select2" name="satuan" required>
+                <select class="form-control select2" id="satuan" name="satuan" required>
                     <option value="">Pilih Satuan</option>
                     <option value="ikat">ikat</option>
                     <option value="botol">botol</option>
@@ -140,6 +140,16 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="harga_beli">Harga Beli :</label>
+                <input type="number" class="form-control" id="harga_beli" placeholder="Masukkan harga beli produk.." name="harga_beli" required onkeypress='validateInt(event)'>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please fill out this field.
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="diskon">Diskon :</label>
                 <input type="number" class="form-control" id="diskon" placeholder="Masukkan diskon produk.." name="diskon" required onkeypress='validateInt(event)'>
                 <div class="valid-feedback">
@@ -150,7 +160,7 @@
                 </div>
             </div>
             <div class="">
-                <a href="{{route('produk.index')}}" class="btn btn-danger mr-2">Cancel</a>
+                <a href="{{route('produk.index')}}" class="btn btn-danger mr-2">Batal</a>
                 <button type="submit" id="btn-save" name="btnsave" class="btn btn-primary">Submit</button>
 
             </div>
@@ -174,7 +184,12 @@
     });
 
     $(document).ready(function() {
-        $('.select2').select2({
+        $('#id_cabang').select2({
+            placeholder: "Pilih Cabang",
+            allowClear: true,
+            theme: "bootstrap-5",
+        });
+        $('#satuan').select2({
             placeholder: "Pilih Satuan",
             allowClear: true,
             theme: "bootstrap-5",

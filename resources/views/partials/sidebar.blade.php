@@ -51,6 +51,22 @@
     </li>
     @endcan
 
+    @can('pembelian-list')
+    <li class="nav-item {{ (request()->is('pembelian*')) ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('pembelian.index') }}">
+            <i class="fas fa-fw fa-shopping-cart"></i>
+            <span>Pembelian</span>
+        </a>
+    </li>
+    @endcan
+
+    <li class="nav-item {{ (request()->is('penjualan*')) ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('pembelian.index') }}">
+            <i class="fas fa-fw fa-cash-register"></i>
+            <span>Transaksi Jual</span>
+        </a>
+    </li>
+
     @can(['role-list','user-list'])
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

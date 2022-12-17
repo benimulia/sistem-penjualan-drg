@@ -65,6 +65,7 @@
                         <th class="text-center">Satuan</th>
                         <th class="text-center">Harga Cash</th>
                         <th class="text-center">Harga Bon</th>
+                        <th class="text-center">Harga Beli</th>
                         <th class="text-center">Diskon</th>
                         <th class="text-center">Updated By</th>
                         <th data-orderable="false"></th>
@@ -82,6 +83,7 @@
                         <td>{{$result->satuan}}</td>
                         <td>{{$result->harga_cash}}</td>
                         <td>{{$result->harga_bon}}</td>
+                        <td>{{$result->harga_beli}}</td>
                         <td>{{$result->diskon}}</td>
                         <td>{{$result->updated_by}}</td>
                         <td class="text-center">

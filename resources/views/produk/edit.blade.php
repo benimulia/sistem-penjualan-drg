@@ -57,7 +57,7 @@
     <div class="col-sm-12 col-md-12">
         <form id="produkForm" class="needs-validation" novalidate action="{{ route('produk.update',['id' => $produk->id_produk]) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="id_produk" id="id_produk">
+            <input type="hidden" id="id_produk" name="id_produk" >
             @if(auth()->user()->id_cabang==1)
             <input type="hidden" name="id_cabang" value="1">
             @elseif(auth()->user()->id_cabang==2)
@@ -68,7 +68,7 @@
             <div class="form-group">
                 <label for="id_cabang">Cabang :</label>
                 <div class="w-100"></div>
-                <select class="form-control select2" name="id_cabang" required disabled=true>
+                <select class="form-control select2" id="id_cabang" name="id_cabang" required disabled=true>
                     <option value="">Pilih Cabang</option>
                     @foreach($cabang as $result)
                     <option value="{{$result->id_cabang}}" {{ ($produk->id_cabang==$result->id_cabang)? "selected" : "" }}>{{$result->nama_cabang}}</option>
@@ -107,7 +107,7 @@
             <div class="form-group">
                 <label for="satuan">Satuan :</label>
                 <div class="w-100"></div>
-                <select class="form-control select2" name="satuan" required disabled=true>
+                <select class="form-control select2" id="satuan" name="satuan" required disabled=true>
                     <option value="">Pilih Satuan</option>
                     <option value="ikat" {{ ($produk->satuan=="ikat")? "selected" : "" }}>ikat</option>
                     <option value="botol" {{ ($produk->satuan=="botol")? "selected" : "" }}>botol</option>
@@ -137,6 +137,16 @@
             <div class="form-group">
                 <label for="harga_bon">Harga Bon :</label>
                 <input type="number" class="form-control" id="harga_bon" placeholder="Masukkan harga bon produk.." name="harga_bon" required onkeypress='validateInt(event)' value="{{$produk->harga_bon}}" disabled=true>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please fill out this field.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="harga_beli">Harga Beli :</label>
+                <input type="number" class="form-control" id="harga_beli" placeholder="Masukkan harga beli produk.." name="harga_beli" required onkeypress='validateInt(event)' value="{{$produk->harga_beli}}" disabled=true>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -200,7 +210,12 @@
     });
 
     $(document).ready(function() {
-        $('.select2').select2({
+        $('#id_cabang').select2({
+            placeholder: "Pilih Cabang",
+            allowClear: true,
+            theme: "bootstrap-5",
+        });
+        $('#satuan').select2({
             placeholder: "Pilih Satuan",
             allowClear: true,
             theme: "bootstrap-5",

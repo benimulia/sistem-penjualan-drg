@@ -43,7 +43,7 @@ class PelangganController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         try {
             if ($request->foto_pelanggan != null && $request->foto_identitas != null) {
@@ -70,6 +70,8 @@ class PelangganController extends Controller
                 'foto_pelanggan' => $nameImagePelanggan,
                 'foto_identitas' => $nameImageIdentitas,
                 'alamat_pelanggan' => $request->alamat_pelanggan,
+                'created_by'  => auth()->user()->name,
+                'updated_by'  => auth()->user()->name,
             ]);
             return redirect()->route('pelanggan.index')->with('success', 'Berhasil menambahkan data');
         } catch (Exception $e) {
@@ -125,7 +127,8 @@ class PelangganController extends Controller
                 'foto_pelanggan' => $nameImagePelanggan,
                 'foto_identitas' => $nameImageIdentitas,
                 'alamat_pelanggan' => $request->alamat_pelanggan,
-                'updated_at' => Carbon::now()
+                'updated_at' => Carbon::now(),
+                'updated_by'  => auth()->user()->name,
             ]);
             return redirect()->route('pelanggan.index')->with('success', 'Berhasil mengedit data');
         } catch (Exception $e) {

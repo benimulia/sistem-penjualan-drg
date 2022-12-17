@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\PembelianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
 
+    // ================== CABANG ==================
     Route::get('/cabang', [CabangController::class, 'index'])->name('cabang.index');
     Route::get('/cabang/create', [CabangController::class, 'create'])->name('cabang.create');
     Route::post('/cabang/store', [CabangController::class, 'store'])->name('cabang.store');
@@ -42,6 +44,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/cabang/update/{id}', [CabangController::class, 'update'])->name('cabang.update');
     Route::get('/cabang/delete/{id}', [CabangController::class, 'destroy'])->name('cabang.destroy');
 
+    // ================== PELANGGAN ==================
     Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
     Route::get('/pelanggan/create', [PelangganController::class, 'create'])->name('pelanggan.create');
     Route::post('/pelanggan/store', [PelangganController::class, 'store'])->name('pelanggan.store');
@@ -49,12 +52,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/pelanggan/update/{id}', [PelangganController::class, 'update'])->name('pelanggan.update');
     Route::get('/pelanggan/delete/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.destroy');
 
+    // ================== PRODUK ==================
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk/store', [ProdukController::class, 'store'])->name('produk.store');
     Route::get('/produk/edit/{id}', [ProdukController::class, 'edit'])->name('produk.edit');
     Route::post('/produk/update/{id}', [ProdukController::class, 'update'])->name('produk.update');
     Route::get('/produk/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
+
+    // ================== PEMBELIAN ==================
+    Route::get('/pembelian', [PembelianController::class, 'index'])->name('pembelian.index');
+    Route::get('/pembelian/create', [PembelianController::class, 'create'])->name('pembelian.create');
+    Route::post('/pembelian/store', [PembelianController::class, 'store'])->name('pembelian.store');
+    Route::get('/pembelian/edit/{id}', [PembelianController::class, 'edit'])->name('pembelian.edit');
+    Route::post('/pembelian/update/{id}', [PembelianController::class, 'update'])->name('pembelian.update');
+    Route::get('/pembelian/delete/{id}', [PembelianController::class, 'destroy'])->name('pembelian.destroy');
 });
 
 

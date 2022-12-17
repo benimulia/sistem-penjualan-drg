@@ -18,6 +18,7 @@ class Produk extends Model
             'satuan',
             'harga_cash',
             'harga_bon',
+            'harga_beli',
             'diskon',
             'created_by',
             'updated_by',

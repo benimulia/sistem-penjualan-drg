@@ -28,6 +28,7 @@
 </div>
 @endif
 {!! Form::open(array('route' => 'users.store','method'=>'POST')) !!}
+@csrf
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
@@ -62,7 +63,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Cabang:</strong>
-            {!! Form::select('cabang', [ 0 => 'Admin', 1 => 'Pakan 1', 2 => 'Telur 1', 3 => 'Telur 2' ], null, array('class' => 'form-control','multiple')) !!}
+            {!! Form::select('id_cabang', [ 0 => 'Admin', 1 => 'Pakan 1', 2 => 'Telur 1', 3 => 'Telur 2' ], null, array('class' => 'form-control','multiple')) !!}
 
         </div>
     </div>

@@ -17,6 +17,8 @@ class Pelanggan extends Model
         'foto_pelanggan',
         'foto_identitas',
         'alamat_pelanggan',
+        'created_by',
+        'updated_by',
     ];
 
 }
