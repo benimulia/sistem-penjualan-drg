@@ -20,7 +20,7 @@ class Pembelian extends Model
             'updated_by',
     ];
 
-    public function pembelian_detail()
+    public function pembeliandetail()
     {
         return $this->hasMany(PembelianDetail::class, 'id_pembelian_detail', 'id_pembelian_detail');
     }

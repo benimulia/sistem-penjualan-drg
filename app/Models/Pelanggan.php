@@ -21,4 +21,9 @@ class Pelanggan extends Model
         'updated_by',
     ];
 
+    public function penjualan()
+    {
+        return $this->hasMany(Penjualan::class,'id_pelanggan','id_pelanggan');
+    }
+
 }
