@@ -17,6 +17,7 @@ class CreateProdukTable extends Migration
             $table->bigIncrements('id_produk');
             $table->integer('id_cabang');
             $table->string('nama_produk');
+            $table->integer('stok');
             $table->string('satuan');
             $table->integer('harga_cash');
             $table->integer('harga_bon');

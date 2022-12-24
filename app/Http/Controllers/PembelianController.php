@@ -124,7 +124,8 @@ class PembelianController extends Controller
 
             $stokupdate = $stokproduk + $request->qty[$key];
             $update = [
-                'stok' => $stokupdate
+                'stok' => $stokupdate,
+                'updated_by' => "pembelian - " . auth()->user()->name,
             ];
             PembelianDetail::create($pembelianDetail);
             Produk::where('id_produk', $items)->update($update);
@@ -175,7 +176,8 @@ class PembelianController extends Controller
 
                 $stokupdate = $stokproduk - $id_pembelian_detail->qty;
                 $update = [
-                    'stok' => $stokupdate
+                    'stok' => $stokupdate,
+                    'updated_by' => "pengurangan - " . auth()->user()->name,
                 ];
 
                 Produk::where('id_produk', $id_pembelian_detail->id_produk)->update($update);
