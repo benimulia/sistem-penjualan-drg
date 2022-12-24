@@ -18,7 +18,7 @@ class CreateAdminUserSeeder extends Seeder
      */
     public function run()
     {
-        //Admin Seeder
+        //Super Admin Seeder
         $user = User::create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
@@ -26,7 +26,7 @@ class CreateAdminUserSeeder extends Seeder
             'id_cabang' => '0',
         ]);
 
-        $role = Role::create(['name' => 'Admin']);
+        $role = Role::create(['name' => 'Super Admin']);
 
         $permissions = Permission::pluck('id', 'id')->all();
 

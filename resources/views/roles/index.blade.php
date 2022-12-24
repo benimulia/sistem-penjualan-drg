@@ -38,12 +38,16 @@
         <td>
             <a class="btn btn-info" href="{{ route('roles.show',$role->id) }}">Show</a>
             @can('role-edit')
+            @if($role->name != 'Super Admin')
             <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
+            @endif
             @endcan
             @can('role-delete')
+            @if($role->name != 'Super Admin')
             {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline','onsubmit' => "return ConfirmDelete()"]) !!}
             {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
             {!! Form::close() !!}
+            @endif
             @endcan
         </td>
     </tr>
