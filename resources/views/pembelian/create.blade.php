@@ -221,7 +221,7 @@
                                             name="discount" value="0" readonly>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="bg-success text-white">
                                     <td colspan="5" style="text-align: right; font-weight: bold">
                                         Grand Total
                                     </td>
