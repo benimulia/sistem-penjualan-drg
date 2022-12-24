@@ -96,7 +96,7 @@ class PembelianController extends Controller
 
         DB::beginTransaction();
 
-        // try {
+        try {
         $pembelian = new Pembelian;
         $pembelian->id_cabang = $request->id_cabang;
         $pembelian->tgl_pembelian = $request->tgl_pembelian;
@@ -134,10 +134,10 @@ class PembelianController extends Controller
 
         DB::commit();
         return redirect()->route('pembelian.index')->with('success', 'Berhasil menambahkan data pembelian');
-        // } catch (Exception $e) {
-        //     DB::rollback();
-        //     return redirect()->back()->with('fail', 'Gagal menambahkan data pembelian');
-        // }
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('fail', 'Gagal menambahkan data pembelian');
+        }
 
 
 
