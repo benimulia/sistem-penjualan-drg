@@ -83,7 +83,7 @@
                         <td>{{$result->created_by}}</td>
                         <td style="min-width:120px">{{$result->created_at}}</td>
                         <td class="text-center">
-                            <a href="{{ route('pembelian.edit',['id' => $result->id_pembelian]) }}" class="btn btn-success text-light btb-circle" id="edit-cabang">
+                            <a href="{{ route('pembelian.edit',['id' => $result->id_pembelian]) }}" class="btn btn-success text-light btb-circle" id="edit-pembelian">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>

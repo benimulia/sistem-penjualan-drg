@@ -125,6 +125,7 @@ class PembelianController extends Controller
             $stokupdate = $stokproduk + $request->qty[$key];
             $update = [
                 'stok' => $stokupdate,
+                'harga_beli' => $request->harga[$key],
                 'updated_by' => "pembelian - " . auth()->user()->name,
             ];
             PembelianDetail::create($pembelianDetail);
