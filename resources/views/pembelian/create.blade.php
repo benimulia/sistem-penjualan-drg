@@ -398,6 +398,8 @@
             allowClear: true,
             theme: "bootstrap-5",
         });
+
+        calc_total();
     });
 
     $("#tabelPembelian tbody").on("input", ".harga", function () {
