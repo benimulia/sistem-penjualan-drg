@@ -60,12 +60,14 @@
     </li>
     @endcan
 
-    <li class="nav-item {{ (request()->is('penjualan*')) ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('pembelian.index') }}">
+    @can('penjualan-list')
+    <li class="nav-item {{ (request()->is('penjualan*')) ? 'active' : '' }}" style="background-color: #5775cf;">
+        <a class="nav-link" href="{{ route('penjualan.index') }}">
             <i class="fas fa-fw fa-cash-register"></i>
             <span>Transaksi Jual</span>
         </a>
     </li>
+    @endcan
 
     @can(['role-list','user-list'])
     <!-- Divider -->
