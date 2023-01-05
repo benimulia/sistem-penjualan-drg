@@ -79,7 +79,7 @@
                         <td class="text-center">{{$index + 1}}</td>
                         <td>{{$result->cabang->nama_cabang}}</td>
                         <td>{{\Illuminate\Support\Str::limit( html_entity_decode(strip_tags($result->nama_produk)), 50 )}}</td>
-                        <td>{{$result->stok}}</td>
+                        <td>{{str_replace(".", "," , $result->stok)}}</td>
                         <td>{{$result->satuan}}</td>
                         <td>{{$result->harga_cash}}</td>
                         <td>{{$result->harga_bon}}</td>

@@ -16,8 +16,8 @@ class CreateProdukTable extends Migration
         Schema::create('produk', function (Blueprint $table) {
             $table->bigIncrements('id_produk');
             $table->integer('id_cabang');
-            $table->string('nama_produk');
-            $table->integer('stok');
+            $table->string('nama_produk')->unique();
+            $table->float('stok', 5, 2);
             $table->string('satuan');
             $table->integer('harga_cash');
             $table->integer('harga_bon');

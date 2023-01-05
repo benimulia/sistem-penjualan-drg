@@ -40,7 +40,7 @@
 
                     @if (count($errors) > 0)
                     <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <strong>Oops!</strong> Email atau password yang Anda masukkan salah.<br><br>
                     </div>
                     @endif
                     <div class="card-body p-0">

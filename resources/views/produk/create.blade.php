@@ -90,7 +90,7 @@
             </div>
             <div class="form-group">
                 <label for="stok">Stok :</label>
-                <input type="number" class="form-control" id="stok" placeholder="Masukkan stok produk.." name="stok" required onkeypress='validateInt(event)'>
+                <input type="text" class="form-control" id="stok" placeholder="Masukkan stok produk.." name="stok" required >
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -218,6 +218,16 @@
 
         }, false);
     })();
+
+    $('#stok').keypress(function (e) {
+        var charCode = (e.which) ? e.which : e.keyCode
+	    if (charCode === 44){
+		    return true;
+	    }else if ( charCode > 31 && (charCode < 48 || charCode > 57) ){
+		    return false;
+	    }
+	    return true;
+    });
 
     function validateInt(evt) {
         var theEvent = evt || window.event;
