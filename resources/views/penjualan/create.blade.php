@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('style')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <!-- Styles -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
@@ -39,13 +40,13 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="pull-left">
-            <h2>Tambah Pembelian Baru</h2>
+            <h2>Tambah Penjualan Baru</h2>
         </div>
         <nav aria-label="breadcrumb" role="navigation">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('pembelian.index') }}">Pembelian</a></li>
-                <li class="breadcrumb-item active"><a href="#">Tambah Pembelian Baru</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('penjualan.index') }}">Penjualan</a></li>
+                <li class="breadcrumb-item active"><a href="#">Tambah Penjualan Baru</a></li>
             </ol>
         </nav>
     </div>
@@ -53,7 +54,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <form action="{{ route('pembelian.store') }}" method="POST">
+        <form action="{{ route('penjualan.store') }}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-sm-6 col-md-3">
@@ -85,9 +86,9 @@
 
                 <div class="col-sm-6 col-md-3">
                     <div class="form-group">
-                        <label for="tgl_pembelian">Tanggal Pembelian :</label>
-                        <input class="datepicker form-control px-2" type="text" id="tgl_pembelian" name="tgl_pembelian"
-                            placeholder="Masukkan tanggal pembelian.." required>
+                        <label for="tgl_penjualan">Tanggal Penjualan :</label>
+                        <input class="datepicker form-control px-2" type="text" id="tgl_penjualan" name="tgl_penjualan"
+                            placeholder="Masukkan tanggal penjualan.." required>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -99,9 +100,12 @@
 
                 <div class="col-sm-6 col-md-3">
                     <div class="form-group">
-                        <label for="supplier">Supplier :</label>
-                        <input type="text" class="form-control" id="supplier" placeholder="Masukkan nama supplier.."
-                            name="supplier" required>
+                        <label for="jenis_transaksi">Jenis Transaksi:</label>
+                        <div class="w-100"></div>
+                        <select class="form-control" id="jenis_transaksi" name="jenis_transaksi" required>
+                            <option value="Cash">Cash</option>
+                            <option value="Bon">Bon</option>
+                        </select>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -110,7 +114,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3"></div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="id_pelanggan">Pelanggan:</label>
+                        <select class="form-control select2 pelanggan" id="id_pelanggan" name="id_pelanggan">
+                            <option value="">Pelanggan</option>
+                            @foreach ($pelanggan as $index => $result)
+                            <option value="{{$result->id_pelanggan}}">{{$result->nama_pelanggan}}</option>
+                            @endforeach
+                        </select>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please fill out this field.
+                        </div>
+                        <small>*tidak wajib diisi</small>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 col-sm-12">
@@ -121,7 +142,7 @@
                                     <th style="width: 20px">#</th>
                                     <th class="col-sm-6">Produk</th>
                                     <th style="width:100px;">Qty</th>
-                                    <th style="width:150px;">Harga</th>
+                                    <th style="width:200px;">Harga</th>
                                     <th style="width:200px">Subtotal</th>
                                     <th></th>
                                 </tr>
@@ -135,7 +156,7 @@
                                                 required>
                                                 <option value="">Pilih Produk</option>
                                                 @foreach ($produk as $index => $result)
-                                                <option value="{{$result->id_produk}}">{{$result->nama_produk}}</option>
+                                                <option value="{{$result->id_produk}}">{{$result->nama_produk}} - {{$result->satuan}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="valid-feedback">
@@ -159,13 +180,12 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group">
-                                            <div class="d-flex">
-                                                <span class="prefix mr-2 mt-0">Rp</span>
-                                                <input type="text" class="form-control harga" id="harga"
-                                                    placeholder="Harga" maxlength="20" name="harga[]" required
-                                                    style="min-width:150px">
-                                            </div>
+                                        <div class="form-group" style="width:200px;">
+                                        <div class="d-flex">
+                                            <span class="prefix mr-2 mt-0">Rp</span>
+                                            <select class="form-control harga" id="harga-dropdown" name="harga">
+                                            </select>
+                                        </div>
                                             <div class="valid-feedback">
                                                 Looks good!
                                             </div>
@@ -243,6 +263,7 @@
                                 <textarea class="form-control" rows="3" id="keterangan" name="keterangan"></textarea>
                                 <small>*tidak wajib diisi</small>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -307,12 +328,12 @@
                 <tr id="R${++rowIdx}">
                     <td class="row-index text-center"><p> ${rowIdx}</p></td>
                     <td>
-                                        <div class="form-group">
+                    <div class="form-group">
                                             <select class="form-control select2 produk" id="produk" name="id_produk[]"
                                                 required>
                                                 <option value="">Pilih Produk</option>
                                                 @foreach ($produk as $index => $result)
-                                                <option value="{{$result->id_produk}}">{{$result->nama_produk}}</option>
+                                                <option value="{{$result->id_produk}}">{{$result->nama_produk}} - {{$result->satuan}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="valid-feedback">
@@ -336,12 +357,12 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group">
-                                            <div class="d-flex">
-                                                <span class="prefix mr-2 mt-0">Rp</span>
-                                                <input type="text" class="form-control harga" id="harga" placeholder="Harga"
-                                                maxlength="20" name="harga[]" required style="min-width:150px">
-                                            </div>
+                                        <div class="form-group" style="width:200px;">
+                                        <div class="d-flex">
+                                            <span class="prefix mr-2 mt-0">Rp</span>
+                                            <select class="form-control harga" id="harga-dropdown" name="harga">
+                                            </select>
+                                        </div>
                                             <div class="valid-feedback">
                                                 Looks good!
                                             </div>
@@ -403,6 +424,41 @@
         calc_total();
     });
 
+    $("#tabelPembelian tbody").on("change", ".produk", function () {
+        if($(this).val() != ''){            
+            var id_produk = $(this).val()
+            
+            $.ajax({
+                context: this,
+                url: "{{route('penjualan.fetch') }}",
+                method : "POST",
+                data : 
+                {
+                    id_produk:id_produk,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(result){
+                    // console.log(result.produk[0].harga_cash);
+                    // $('#harga-dropdown').html('<option value="' + result.produk[0].harga_cash + '">' + result.produk[0].harga_cash + '</option>');
+                    // $('#harga-dropdown').append('<option value="' + result.produk[0].harga_bon + '">' + "Bon: " + result.produk[0].harga_bon + '</option>');
+                    
+                    // var harga = $(this).closest("tr").find(".sub_total");
+                    // harga.val(3000);
+                    $(this).closest("tr").find(".harga").html('<option value="' + result.produk[0].harga_cash + '">' + result.produk[0].harga_cash + '</option>');
+                    $(this).closest("tr").find(".harga").append('<option value="' + result.produk[0].harga_bon + '">' + "Bon: " + result.produk[0].harga_bon + '</option>');
+
+                    var harga = parseFloat($(this).closest("tr").find(".harga").val());
+                    var qty = parseFloat($(this).closest("tr").find(".qty").val());
+                    var subtotal = $(this).closest("tr").find(".sub_total");
+                    subtotal.val(harga * qty);
+                    calc_total();
+                }
+            })
+        }
+        
+    });
+
     $("#tabelPembelian tbody").on("input", ".harga", function () {
         var harga = parseFloat($(this).val());
         var qty = parseFloat($(this).closest("tr").find(".qty").val());
@@ -431,6 +487,26 @@
 
     }
 
+    function getTanggal() {
+        var today = new Date();
+        var dd = today.getDate();
+
+        var mm = today.getMonth()+1; 
+        var yyyy = today.getFullYear();
+        if(dd<10) 
+        {
+            dd='0'+dd;
+        } 
+
+        if(mm<10) 
+        {
+            mm='0'+mm;
+        } 
+
+        return today = yyyy+'-'+mm+'-'+dd;
+
+    }
+
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
@@ -443,6 +519,8 @@
     });
 
     $(document).ready(function () {
+        document.getElementById('tgl_penjualan').value=getTanggal();
+
         $('#id_cabang').select2({
             placeholder: "Pilih Cabang",
             allowClear: true,
@@ -450,6 +528,12 @@
         });
         $('.produk').select2({
             placeholder: "Pilih Produk",
+            allowClear: true,
+            theme: "bootstrap-5",
+        });
+
+        $('.pelanggan').select2({
+            placeholder: "Pilih Pelanggan",
             allowClear: true,
             theme: "bootstrap-5",
         });

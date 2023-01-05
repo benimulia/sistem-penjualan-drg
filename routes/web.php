@@ -11,6 +11,7 @@ use App\Http\Controllers\CabangController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\PembelianController;
+use App\Http\Controllers\PenjualanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/pembelian/edit/{id}', [PembelianController::class, 'edit'])->name('pembelian.edit');
     Route::post('/pembelian/update/{id}', [PembelianController::class, 'update'])->name('pembelian.update');
     Route::get('/pembelian/delete/{id}', [PembelianController::class, 'destroy'])->name('pembelian.destroy');
+
+     // ================== PENJUALAN ==================
+     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
+     Route::get('/penjualan/create', [PenjualanController::class, 'create'])->name('penjualan.create');
+     Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+     Route::get('/penjualan/edit/{id}', [PenjualanController::class, 'edit'])->name('penjualan.edit');
+     Route::post('/penjualan/update/{id}', [PenjualanController::class, 'update'])->name('penjualan.update');
+     Route::get('/penjualan/delete/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
+
+     Route::post('/penjualan/fetch', [PenjualanController::class, 'fetch'])->name('penjualan.fetch');
 });
 
 

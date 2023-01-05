@@ -46,6 +46,10 @@ class PermissionTableSeeder extends Seeder
             'pembelian-create',
             'pembelian-edit',
             'pembelian-delete',
+            'penjualan-list',
+            'penjualan-create',
+            'penjualan-edit',
+            'penjualan-delete',
         ];
 
         foreach ($permissions as $permission) {
