@@ -17,7 +17,7 @@ class CreatePembelianDetailTable extends Migration
             $table->bigIncrements('id_pembelian_detail');
             $table->integer('id_pembelian');
             $table->integer('id_produk');
-            $table->integer('qty');
+            $table->float('qty', 5, 2);
             $table->integer('harga');
             $table->integer('subtotal');
             $table->string('created_by');

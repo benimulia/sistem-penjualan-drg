@@ -81,10 +81,10 @@
                         <td>{{\Illuminate\Support\Str::limit( html_entity_decode(strip_tags($result->nama_produk)), 50 )}}</td>
                         <td>{{str_replace(".", "," , $result->stok)}}</td>
                         <td>{{$result->satuan}}</td>
-                        <td>{{$result->harga_cash}}</td>
-                        <td>{{$result->harga_bon}}</td>
-                        <td>{{$result->harga_beli}}</td>
-                        <td>{{$result->diskon}}</td>
+                        <td style="min-width:170px">Rp {{number_format($result->harga_cash,0,',','.') }}</td>
+                        <td style="min-width:170px">Rp {{number_format($result->harga_bon,0,',','.') }}</td>
+                        <td style="min-width:170px">Rp {{number_format($result->harga_beli,0,',','.') }}</td>
+                        <td style="min-width:170px">Rp {{number_format($result->diskon,0,',','.') }}</td>
                         <td>{{$result->updated_by}}</td>
                         <td class="text-center">
                             <a href="{{ route('produk.edit',['id' => $result->id_produk]) }}" class="btn btn-success text-light btb-circle" id="edit-cabang">

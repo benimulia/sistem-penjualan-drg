@@ -19,7 +19,7 @@ class CreatePenjualanDetailTable extends Migration
             $table->integer('id_produk');
             $table->string('satuan');
             $table->integer('harga');
-            $table->integer('qty');
+            $table->float('qty', 5, 2);
             $table->integer('subtotal');
             $table->string('created_by');
             $table->string('updated_by');

@@ -111,18 +111,22 @@ class PembelianController extends Controller
         $id_pembelian = $id_pembelian->id_pembelian;
 
         foreach ($request->id_produk as $key => $items) {
+            $qtyString = $request->qty[$key];
+            $qtyString = str_replace(array('.', ','), array('', '.'), $qtyString);
+            $qty = floatval($qtyString);
+
             $pembelianDetail['id_produk'] = $items;
             $pembelianDetail['id_pembelian'] = $id_pembelian;
             $pembelianDetail['harga'] = $request->harga[$key];
             $pembelianDetail['subtotal'] = $request->subtotal[$key];
-            $pembelianDetail['qty'] = $request->qty[$key];
+            $pembelianDetail['qty'] = $qty;
             $pembelianDetail['created_by'] = auth()->user()->name;
             $pembelianDetail['updated_by'] = auth()->user()->name;
 
             $stokproduk = DB::table('produk')->where('id_produk', $items)->select('stok')->first();
             $stokproduk = $stokproduk->stok;
 
-            $stokupdate = $stokproduk + $request->qty[$key];
+            $stokupdate = $stokproduk + $qty;
             $update = [
                 'stok' => $stokupdate,
                 'harga_beli' => $request->harga[$key],

@@ -76,8 +76,8 @@
                         <td class="text-center" style="min-width:20px">{{$index + 1}}</td>
                         <td>{{$result->cabang->nama_cabang}}</td>
                         <td style="min-width:120px" >{{$result->created_at}}</td>
-                        <td style="min-width:170px">Rp {{number_format($result->total,0,',','.') }}</td>
-                        <td style="min-width:80px">{{$result->status}}</td>
+                        <td style="min-width:170px">Rp {{number_format($result->total_penjualan,0,',','.') }}</td>
+                        <td style="min-width:80px">{{$result->status_transaksi}}</td>
                         <td style="min-width:200px">{{$result->keterangan}}</td>
                         <td>{{$result->created_by}}</td>
                         <td class="text-center">

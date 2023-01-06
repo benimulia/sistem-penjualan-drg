@@ -165,7 +165,7 @@
                                         <div class="form-group">
                                             <input type="text" class="form-control qty" id="qty" placeholder="Qty"
                                                 maxlength="5" name="qty[]" required style="min-width:100px"
-                                                value="{{$item->qty}}" disabled=true>
+                                                value="{{str_replace(".", "," , $item->qty)}}" disabled=true>
                                             <div class="valid-feedback">
                                                 Looks good!
                                             </div>

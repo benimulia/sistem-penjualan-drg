@@ -183,7 +183,7 @@
                                         <div class="form-group" style="width:200px;">
                                         <div class="d-flex">
                                             <span class="prefix mr-2 mt-0">Rp</span>
-                                            <select class="form-control harga" id="harga-dropdown" name="harga">
+                                            <select class="form-control harga" id="harga-dropdown" name="harga[]">
                                             </select>
                                         </div>
                                             <div class="valid-feedback">
@@ -202,6 +202,9 @@
                                                 id="subtotal" name="subtotal[]" value="0" readonly>
                                         </div>
                                     </td>
+                                    
+                                    <input class="satuan" type="hidden" name="satuan[]" id="satuan">
+
                                     <td><a href="javascript:void(0)" class="text-success font-18" title="Add"
                                             id="addBtn"><i class="fa fa-plus"></i></a></td>
                                 </tr>
@@ -225,20 +228,31 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td colspan="5" class="text-right">Tax</td>
                                     <td>
                                         <input class="form-control text-right" type="text" id="tax_1" name="tax_1"
                                             value="0" readonly>
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td colspan="5" class="text-right">
-                                        Discount %
+                                        Discount
                                     </td>
                                     <td>
                                         <input class="form-control text-right discount" type="text" id="discount"
                                             name="discount" value="0" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right"></td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right">Jumlah Bayar</td>
+                                    <td>
+                                        <input class="form-control text-right" type="text" id="jumlah_bayar" name="jumlah_bayar" required>
                                     </td>
                                 </tr>
                                 <tr class="bg-success text-white">
@@ -251,6 +265,12 @@
                                             <input class="form-control text-right" type="text" id="total" name="total"
                                                 value="0" readonly>
                                         </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right">Kembali</td>
+                                    <td>
+                                        <input class="form-control text-right" type="text" id="kembalian" name="kembalian" readonly>
                                     </td>
                                 </tr>
                             </tbody>
@@ -360,7 +380,7 @@
                                         <div class="form-group" style="width:200px;">
                                         <div class="d-flex">
                                             <span class="prefix mr-2 mt-0">Rp</span>
-                                            <select class="form-control harga" id="harga-dropdown" name="harga">
+                                            <select class="form-control harga" id="harga-dropdown" name="harga[]">
                                             </select>
                                         </div>
                                             <div class="valid-feedback">
@@ -378,6 +398,7 @@
                                             name="subtotal[]" value="0" readonly>
                                         </div>
                                     </td>
+                                    <input class="satuan" type="hidden" name="satuan[]" id="satuan">
                     <td><a href="javascript:void(0)" class="text-danger font-18 remove" title="Remove"><i class="fa fa-trash"></i></a></td>
                 </tr>`);
         $('.produk').select2({
@@ -439,12 +460,6 @@
                 },
                 dataType: 'json',
                 success:function(result){
-                    // console.log(result.produk[0].harga_cash);
-                    // $('#harga-dropdown').html('<option value="' + result.produk[0].harga_cash + '">' + result.produk[0].harga_cash + '</option>');
-                    // $('#harga-dropdown').append('<option value="' + result.produk[0].harga_bon + '">' + "Bon: " + result.produk[0].harga_bon + '</option>');
-                    
-                    // var harga = $(this).closest("tr").find(".sub_total");
-                    // harga.val(3000);
                     $(this).closest("tr").find(".harga").html('<option value="' + result.produk[0].harga_cash + '">' + result.produk[0].harga_cash + '</option>');
                     $(this).closest("tr").find(".harga").append('<option value="' + result.produk[0].harga_bon + '">' + "Bon: " + result.produk[0].harga_bon + '</option>');
 
@@ -453,6 +468,9 @@
                     var subtotal = $(this).closest("tr").find(".sub_total");
                     subtotal.val(harga * qty);
                     calc_total();
+
+                    var satuan = $(this).closest("tr").find(".satuan");
+                    satuan.val(result.produk[0].satuan);
                 }
             })
         }
@@ -461,23 +479,26 @@
 
     $("#tabelPembelian tbody").on("input", ".harga", function () {
         var harga = parseFloat($(this).val());
-        var qty = parseFloat($(this).closest("tr").find(".qty").val());
+        var qty = parseFloat($(this).closest("tr").find(".qty").val().replaceAll(',', '.'));
         var subtotal = $(this).closest("tr").find(".sub_total");
         subtotal.val(harga * qty);
 
         calc_total();
+        calc_kembalian();
     });
 
     $("#tabelPembelian tbody").on("input", ".qty", function () {
-        var qty = parseFloat($(this).val());
+        var qty = parseFloat($(this).val().replaceAll(',', '.'));
         var harga = parseFloat($(this).closest("tr").find(".harga").val());
         var subtotal = $(this).closest("tr").find(".sub_total");
         subtotal.val(harga * qty);
         calc_total();
+        calc_kembalian();
     });
 
     function calc_total() {
         var sum = 0;
+
         $(".sub_total").each(function () {
             sum += parseFloat($(this).val());
         });
@@ -486,6 +507,31 @@
         $("#total").val(new Intl.NumberFormat('id-ID').format(sum));
 
     }
+
+    function calc_kembalian() {
+        var total = $("#total").val().replaceAll('.', '');
+        var bayar = $("#jumlah_bayar").val().replaceAll('.', '');
+        
+        var kembalian = $("#kembalian");
+        kembalian.val(bayar-total);
+
+        // Get the value.
+        var input = kembalian.val();            
+        input = input.replace(/[\D\s\._\-]+/g, ""); 
+        input = input?parseInt(input, 10):0; 
+        kembalian.val(function () {
+            if(kembalian.val() < 0){
+                return (input === 0)?"":"-" + input.toLocaleString("id-ID"); 
+            }else{
+                return (input === 0)?"":input.toLocaleString("id-ID"); 
+            }
+            
+        }); 
+    }
+
+    $("#jumlah_bayar").on("input", function () {
+        calc_kembalian();
+    });
 
     function getTanggal() {
         var today = new Date();
@@ -563,14 +609,13 @@
     })();
 
     $('#qty').keypress(function (e) {
-        var arr = [];
-        var kk = e.which;
-
-        for (i = 48; i < 58; i++)
-            arr.push(i);
-
-        if (!(arr.indexOf(kk) >= 0))
-            e.preventDefault();
+        var charCode = (e.which) ? e.which : e.keyCode
+	    if (charCode === 44){
+		    return true;
+	    }else if ( charCode > 31 && (charCode < 48 || charCode > 57) ){
+		    return false;
+	    }
+	    return true;
     });
 
     $('#harga').keypress(function (e) {
@@ -584,31 +629,25 @@
             e.preventDefault();
     });
 
-
-    // var rupiah = document.getElementById("harga");
-    // rupiah.addEventListener("keyup", function (e) {
-    //     // tambahkan 'Rp.' pada saat form di ketik
-    //     // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-    //      rupiah.valu        e = formatRupiah(this.v        al ue, "Rp. ");
-    // });
-
-    // /* Fungsi formatRu        piah */
-    // fu        nction formatRupiah( angka, prefix) {
-              //     var                 mber_string = angka.                place(/[^,\d]/g, "").toString(),
-    //                                   split = number_string.split(","),
-    //         sisa = split[0].length % 3,
-    //         rupiah = split[0].substr(0, sisa),
-    //         ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-    //     // tambahkan titik jika yang di input sudah menjadi angka ribuan
-    //     if (ribuan) {
-    //         separator = sisa ? "." : "";
-    //         rupiah += separator + ribuan.join(".");
-    //     }
-
-    //     rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-    //     return prefix == un? rupiah : rupiah ? "Rp. " + rupiah : "";
-    // }
+    $("#jumlah_bayar").on("keyup", function(event) {                   
+    // When user select text in the document, also abort.
+    var selection = window.getSelection().toString(); 
+    if (selection !== '') {
+        return; 
+    }       
+    // When the arrow keys are pressed, abort.
+    if ($.inArray(event.keyCode, [38, 40, 37, 39]) !== -1) {
+        return; 
+    }       
+    var $this = $(this);            
+    // Get the value.
+    var input = $this.val();            
+    input = input.replace(/[\D\s\._\-]+/g, ""); 
+    input = input?parseInt(input, 10):0; 
+    $this.val(function () {
+        return (input === 0)?"":input.toLocaleString("id-ID"); 
+    }); 
+    }); 
 
 </script>
 @endsection

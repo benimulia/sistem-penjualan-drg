@@ -81,7 +81,7 @@ class PenjualanController extends Controller
         $id_produk = $request->id_produk;
 
         $data['produk'] = Produk::where("id_produk", $id_produk)
-                                ->get(["harga_cash", "harga_bon"]);
+                                ->get(["harga_cash", "harga_bon", "satuan"]);
 
         return response()->json($data);
     }
@@ -106,34 +106,46 @@ class PenjualanController extends Controller
     {
         DB::beginTransaction();
 
-        try {
+        
             $penjualan = new Penjualan();
             $penjualan->id_cabang = $request->id_cabang;
             $penjualan->tgl_penjualan = $request->tgl_penjualan;
             $penjualan->id_pelanggan = $request->id_pelanggan;
             $penjualan->jenis_transaksi = $request->jenis_transaksi;
             $penjualan->total_penjualan = str_replace(".", "", $request->total);
+            $penjualan->jumlah_bayar = str_replace(".", "", $request->jumlah_bayar);
             $penjualan->keterangan = $request->keterangan;
             $penjualan->created_by = auth()->user()->name;
             $penjualan->updated_by = auth()->user()->name;
+
+            if($request->jenis_transaksi == 'Cash'){
+                $penjualan->status_transaksi = "Lunas";
+            }else{
+                $penjualan->status_transaksi = "Belum Lunas";
+            }
             $penjualan->save();
 
             $id_penjualan = DB::table('penjualan')->orderBy('id_penjualan', 'DESC')->select('id_penjualan')->first();
             $id_penjualan = $id_penjualan->id_penjualan;
 
             foreach ($request->id_produk as $key => $items) {
+                $qtyString = $request->qty[$key];
+                $qtyString = str_replace(array('.', ','), array('', '.'), $qtyString);
+                $qty = floatval($qtyString);
+
                 $penjualanDetail['id_produk'] = $items;
                 $penjualanDetail['id_penjualan'] = $id_penjualan;
                 $penjualanDetail['harga'] = $request->harga[$key];
                 $penjualanDetail['subtotal'] = $request->subtotal[$key];
-                $penjualanDetail['qty'] = $request->qty[$key];
+                $penjualanDetail['satuan'] = $request->satuan[$key];
+                $penjualanDetail['qty'] = $qty;
                 $penjualanDetail['created_by'] = auth()->user()->name;
                 $penjualanDetail['updated_by'] = auth()->user()->name;
 
                 $stokproduk = DB::table('produk')->where('id_produk', $items)->select('stok')->first();
                 $stokproduk = $stokproduk->stok;
 
-                $stokupdate = $stokproduk + $request->qty[$key];
+                $stokupdate = $stokproduk - $qty;
                 $update = [
                     'stok' => $stokupdate,
                     'updated_by' => "penjualan - " . auth()->user()->name,
@@ -144,10 +156,7 @@ class PenjualanController extends Controller
 
             DB::commit();
             return redirect()->route('penjualan.index')->with('success', 'Berhasil menambahkan data penjualan');
-        } catch (Exception $e) {
-            DB::rollback();
-            return redirect()->back()->with('fail', 'Gagal menambahkan data penjualan');
-        }
+        
     }
 // ======================== belum
     public function update($id, Request $request)

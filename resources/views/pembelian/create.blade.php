@@ -405,7 +405,7 @@
 
     $("#tabelPembelian tbody").on("input", ".harga", function () {
         var harga = parseFloat($(this).val());
-        var qty = parseFloat($(this).closest("tr").find(".qty").val());
+        var qty = parseFloat($(this).closest("tr").find(".qty").val().replaceAll(',', '.'));
         var subtotal = $(this).closest("tr").find(".sub_total");
         subtotal.val(harga * qty);
 
@@ -413,7 +413,7 @@
     });
 
     $("#tabelPembelian tbody").on("input", ".qty", function () {
-        var qty = parseFloat($(this).val());
+        var qty = parseFloat($(this).val().replaceAll(',', '.'));
         var harga = parseFloat($(this).closest("tr").find(".harga").val());
         var subtotal = $(this).closest("tr").find(".sub_total");
         subtotal.val(harga * qty);
@@ -479,14 +479,13 @@
     })();
 
     $('#qty').keypress(function (e) {
-        var arr = [];
-        var kk = e.which;
-
-        for (i = 48; i < 58; i++)
-            arr.push(i);
-
-        if (!(arr.indexOf(kk) >= 0))
-            e.preventDefault();
+        var charCode = (e.which) ? e.which : e.keyCode
+	    if (charCode === 44){
+		    return true;
+	    }else if ( charCode > 31 && (charCode < 48 || charCode > 57) ){
+		    return false;
+	    }
+	    return true;
     });
 
     $('#harga').keypress(function (e) {
@@ -499,32 +498,6 @@
         if (!(arr.indexOf(kk) >= 0))
             e.preventDefault();
     });
-
-
-    // var rupiah = document.getElementById("harga");
-    // rupiah.addEventListener("keyup", function (e) {
-    //     // tambahkan 'Rp.' pada saat form di ketik
-    //     // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-    //      rupiah.valu        e = formatRupiah(this.v        al ue, "Rp. ");
-    // });
-
-    // /* Fungsi formatRu        piah */
-    // fu        nction formatRupiah( angka, prefix) {
-              //     var                 mber_string = angka.                place(/[^,\d]/g, "").toString(),
-    //                                   split = number_string.split(","),
-    //         sisa = split[0].length % 3,
-    //         rupiah = split[0].substr(0, sisa),
-    //         ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-    //     // tambahkan titik jika yang di input sudah menjadi angka ribuan
-    //     if (ribuan) {
-    //         separator = sisa ? "." : "";
-    //         rupiah += separator + ribuan.join(".");
-    //     }
-
-    //     rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-    //     return prefix == un? rupiah : rupiah ? "Rp. " + rupiah : "";
-    // }
 
 </script>
 @endsection
