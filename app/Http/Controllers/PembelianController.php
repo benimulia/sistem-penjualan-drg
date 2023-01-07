@@ -143,9 +143,6 @@ class PembelianController extends Controller
             DB::rollback();
             return redirect()->back()->with('fail', 'Gagal menambahkan data pembelian');
         }
-
-
-
     }
 
     public function update($id, Request $request)
@@ -182,7 +179,7 @@ class PembelianController extends Controller
                 $stokupdate = $stokproduk - $id_pembelian_detail->qty;
                 $update = [
                     'stok' => $stokupdate,
-                    'updated_by' => "pengurangan - " . auth()->user()->name,
+                    'updated_by' => "batal beli - " . auth()->user()->name,
                 ];
 
                 Produk::where('id_produk', $id_pembelian_detail->id_produk)->update($update);

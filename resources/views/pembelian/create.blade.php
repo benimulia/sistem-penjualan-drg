@@ -53,7 +53,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <form action="{{ route('pembelian.store') }}" method="POST">
+        <form action="{{ route('pembelian.store') }}" method="POST" autocomplete="off">
             @csrf
             <div class="row">
                 <div class="col-sm-6 col-md-3">

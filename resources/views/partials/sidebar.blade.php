@@ -24,14 +24,6 @@
         </a>
     </li>
 
-    @can('cabang-list')
-    <li class="nav-item {{ (request()->is('cabang*')) ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('cabang.index') }}">
-            <i class="fas fa-fw fa-code-branch"></i>
-            <span>Cabang</span>
-        </a>
-    </li>
-    @endcan
 
     @can('produk-list')
     <li class="nav-item {{ (request()->is('produk*')) ? 'active' : '' }}">
@@ -61,7 +53,7 @@
     @endcan
 
     @can('penjualan-list')
-    <li class="nav-item {{ (request()->is('penjualan*')) ? 'active' : '' }}" style="background-color: #5775cf;">
+    <li class="nav-item {{ (request()->is('penjualan*')) ? 'active' : '' }}" >
         <a class="nav-link" href="{{ route('penjualan.index') }}">
             <i class="fas fa-fw fa-cash-register"></i>
             <span>Transaksi Jual</span>
@@ -73,18 +65,18 @@
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
-    <li class="nav-item">
+    <li class="nav-item {{ (request()->is('setting*')) ? 'active' : '' }}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Setting</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Setting Menu:</h6>
+                <h6 class="collapse-header">Menu Setting:</h6>
 
-                <a class="collapse-item" href="{{ route('roles.index') }}">Manage Role</a>
-
-                <a class="collapse-item" href="{{ route('users.index') }}">Manage Users</a>
+                <a class="collapse-item" href="{{ route('roles.index') }}">Kelola Role</a>
+                <a class="collapse-item" href="{{ route('users.index') }}">Kelola Users</a>
+                <a class="collapse-item" href="{{ route('cabang.index') }}">Cabang</a>
             </div>
         </div>
     </li>

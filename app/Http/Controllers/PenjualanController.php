@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Penjualan;
 use App\Models\Produk;
 use App\Models\Pelanggan;
+use App\Models\RekapBon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cabang;
@@ -59,11 +60,11 @@ class PenjualanController extends Controller
     public function create()
     {
         $user = auth()->user();
-        if ($user->id_cabang==1) {
+        if ($user->id_cabang == 1) {
             $produk = Produk::with('cabang')->where('id_cabang', 1)->orderBy('nama_produk', 'ASC')->get();
-        } elseif ($user->id_cabang==2) {
+        } elseif ($user->id_cabang == 2) {
             $produk = Produk::with('cabang')->where('id_cabang', 2)->orderBy('nama_produk', 'ASC')->get();
-        } elseif ($user->id_cabang==3) {
+        } elseif ($user->id_cabang == 3) {
             $produk = Produk::with('cabang')->where('id_cabang', 3)->orderBy('nama_produk', 'ASC')->get();
         } else {
             $produk = Produk::orderBy('nama_produk', 'ASC')->get();
@@ -71,7 +72,10 @@ class PenjualanController extends Controller
 
         $pelanggan = Pelanggan::all();
         $cabang = Cabang::all();
-        return view('penjualan.create', compact('produk', 'cabang', 'pelanggan' ), [
+
+        $date = date('Y-m-d');
+        $tglhariini = $this->format_hari_tanggal($date);
+        return view('penjualan.create', compact('produk', 'cabang', 'pelanggan', 'tglhariini'), [
             "title" => "Tambah Penjualan"
         ]);
     }
@@ -81,7 +85,7 @@ class PenjualanController extends Controller
         $id_produk = $request->id_produk;
 
         $data['produk'] = Produk::where("id_produk", $id_produk)
-                                ->get(["harga_cash", "harga_bon", "satuan"]);
+            ->get(["harga_cash", "harga_bon", "satuan"]);
 
         return response()->json($data);
     }
@@ -106,33 +110,39 @@ class PenjualanController extends Controller
     {
         DB::beginTransaction();
 
-        
+        try{
             $penjualan = new Penjualan();
             $penjualan->id_cabang = $request->id_cabang;
             $penjualan->tgl_penjualan = $request->tgl_penjualan;
             $penjualan->id_pelanggan = $request->id_pelanggan;
-            $penjualan->jenis_transaksi = $request->jenis_transaksi;
-            $penjualan->total_penjualan = str_replace(".", "", $request->total);
-            $penjualan->jumlah_bayar = str_replace(".", "", $request->jumlah_bayar);
+    
+            $total = (int) str_replace(".", "", $request->total);
+            $jml_bayar = (int) str_replace(".", "", $request->jumlah_bayar);
+    
+            $penjualan->total_penjualan = $total;
+            $penjualan->jumlah_bayar = $jml_bayar;
             $penjualan->keterangan = $request->keterangan;
             $penjualan->created_by = auth()->user()->name;
             $penjualan->updated_by = auth()->user()->name;
-
-            if($request->jenis_transaksi == 'Cash'){
-                $penjualan->status_transaksi = "Lunas";
-            }else{
+    
+            if ($jml_bayar < $total) {
                 $penjualan->status_transaksi = "Belum Lunas";
+                $penjualan->jenis_transaksi = "Bon";
+            } else {
+                $penjualan->status_transaksi = "Lunas";
+                $penjualan->jenis_transaksi = "Cash";
             }
+    
             $penjualan->save();
-
+    
             $id_penjualan = DB::table('penjualan')->orderBy('id_penjualan', 'DESC')->select('id_penjualan')->first();
             $id_penjualan = $id_penjualan->id_penjualan;
-
+    
             foreach ($request->id_produk as $key => $items) {
                 $qtyString = $request->qty[$key];
                 $qtyString = str_replace(array('.', ','), array('', '.'), $qtyString);
                 $qty = floatval($qtyString);
-
+    
                 $penjualanDetail['id_produk'] = $items;
                 $penjualanDetail['id_penjualan'] = $id_penjualan;
                 $penjualanDetail['harga'] = $request->harga[$key];
@@ -141,10 +151,10 @@ class PenjualanController extends Controller
                 $penjualanDetail['qty'] = $qty;
                 $penjualanDetail['created_by'] = auth()->user()->name;
                 $penjualanDetail['updated_by'] = auth()->user()->name;
-
+    
                 $stokproduk = DB::table('produk')->where('id_produk', $items)->select('stok')->first();
                 $stokproduk = $stokproduk->stok;
-
+    
                 $stokupdate = $stokproduk - $qty;
                 $update = [
                     'stok' => $stokupdate,
@@ -153,12 +163,42 @@ class PenjualanController extends Controller
                 PenjualanDetail::create($penjualanDetail);
                 Produk::where('id_produk', $items)->update($update);
             }
-
+    
+            if ($jml_bayar < $total) {
+    
+                try {
+                    $bon = new RekapBon();
+                    $bon->id_cabang = $request->id_cabang;
+                    $bon->id_pelanggan = $request->id_pelanggan;
+                    $bon->id_penjualan = $id_penjualan;
+                    $bon->tgl_bon = $request->tgl_penjualan;
+                    $bon->total = $total - $jml_bayar;
+                    $bon->jumlah_terbayar = 0;
+                    $bon->status = "Belum Lunas";
+                    $bon->created_by = auth()->user()->name;
+                    $bon->updated_by = auth()->user()->name;
+    
+                    $bon->save();
+                } catch (Exception $e) {
+                    $getmessage = $e->getMessage();
+                    $arraymessage = explode(" ", $getmessage);
+                    $message = "";
+                    for ($i = 5; $i <= 9; $i++) {
+                        $message .= $arraymessage[$i] . " ";
+                    }
+                    return redirect()->route('penjualan.create')->with('fail', 'Gagal menambahkan data. Silahkan coba lagi. ' . $message);
+                }
+            }
+    
             DB::commit();
             return redirect()->route('penjualan.index')->with('success', 'Berhasil menambahkan data penjualan');
-        
+        }catch(Exception $e){
+            DB::rollback();
+            return redirect()->back()->with('fail', 'Gagal menambahkan data pembelian');
+        }
     }
-// ======================== belum
+
+
     public function update($id, Request $request)
     {
         try {
@@ -179,27 +219,36 @@ class PenjualanController extends Controller
         }
     }
 
+    
     public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            /** delete record table pembelian_detail */
-            $pembeliandetail = DB::table('pembelian_detail')->where('id_pembelian', $id)->get();
-            foreach ($pembeliandetail as $key => $id_pembelian_detail) {
-                $stokproduk = DB::table('produk')->where('id_produk', $id_pembelian_detail->id_produk)->select('stok')->first();
+            /** delete record table penjualan_detail */
+            $penjualandetail = DB::table('penjualan_detail')->where('id_penjualan', $id)->get();
+            foreach ($penjualandetail as $key => $id_penjualan_detail) {
+                $stokproduk = DB::table('produk')->where('id_produk', $id_penjualan_detail->id_produk)->select('stok')->first();
                 $stokproduk = $stokproduk->stok;
 
-                $stokupdate = $stokproduk - $id_pembelian_detail->qty;
+                $stokupdate = $stokproduk + $id_penjualan_detail->qty;
                 $update = [
                     'stok' => $stokupdate,
-                    'updated_by' => "pengurangan - " . auth()->user()->name,
+                    'updated_by' => "batal jual - " . auth()->user()->name,
                 ];
 
-                Produk::where('id_produk', $id_pembelian_detail->id_produk)->update($update);
-                DB::table('pembelian_detail')->where('id_pembelian_detail', $id_pembelian_detail->id_pembelian_detail)->delete();
+                Produk::where('id_produk', $id_penjualan_detail->id_produk)->update($update);
+                DB::table('penjualan_detail')->where('id_penjualan_detail', $id_penjualan_detail->id_penjualan_detail)->delete();
             }
 
-            /** delete record table pembelian */
+            $rekap_bon = DB::table('rekap_bon')->where('id_penjualan', $id)->get();
+            foreach ($rekap_bon as $key => $id_rekap_bon) {
+                DB::table('rekap_bayar_bon')->where('id_bon', $id_rekap_bon->id_bon)->delete();
+            }
+
+            /** delete record table rekap_bon */
+            RekapBon::destroy($id);
+
+            /** delete record table penjualan */
             Penjualan::destroy($id);
 
             DB::commit();
@@ -208,5 +257,46 @@ class PenjualanController extends Controller
             DB::rollback();
             return redirect()->with('fail', 'Gagal menghapus data. Silahkan coba lagi');
         }
+    }
+
+
+    function format_hari_tanggal($waktu)
+    {
+        $hari_array = array(
+            'Minggu',
+            'Senin',
+            'Selasa',
+            'Rabu',
+            'Kamis',
+            'Jumat',
+            'Sabtu'
+        );
+        $hr = date('w', strtotime($waktu));
+        $hari = $hari_array[$hr];
+        $tanggal = date('j', strtotime($waktu));
+        $bulan_array = array(
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        );
+        $bl = date('n', strtotime($waktu));
+        $bulan = $bulan_array[$bl];
+        $tahun = date('Y', strtotime($waktu));
+        $jam = date('H:i:s', strtotime($waktu));
+
+        //untuk menampilkan hari, tanggal bulan tahun jam
+        //return "$hari, $tanggal $bulan $tahun $jam";
+
+        //untuk menampilkan hari, tanggal bulan tahun
+        return "$hari, $tanggal $bulan $tahun";
     }
 }

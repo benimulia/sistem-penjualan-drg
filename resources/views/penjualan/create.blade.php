@@ -40,7 +40,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="pull-left">
-            <h2>Tambah Penjualan Baru</h2>
+            <h2>Tambah Penjualan Baru - {{$tglhariini}}</h2>
         </div>
         <nav aria-label="breadcrumb" role="navigation">
             <ol class="breadcrumb">
@@ -52,9 +52,10 @@
     </div>
 </div>
 
+
 <div class="row">
     <div class="col-sm-12">
-        <form action="{{ route('penjualan.store') }}" method="POST">
+        <form action="{{ route('penjualan.store') }}" method="POST" autocomplete="off">
             @csrf
             <div class="row">
                 <div class="col-sm-6 col-md-3">
@@ -99,23 +100,7 @@
                 </div>
 
                 <div class="col-sm-6 col-md-3">
-                    <div class="form-group">
-                        <label for="jenis_transaksi">Jenis Transaksi:</label>
-                        <div class="w-100"></div>
-                        <select class="form-control" id="jenis_transaksi" name="jenis_transaksi" required>
-                            <option value="Cash">Cash</option>
-                            <option value="Bon">Bon</option>
-                        </select>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        <div class="invalid-feedback">
-                            Please fill out this field.
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="form-group">
+                <div class="form-group">
                         <label for="id_pelanggan">Pelanggan:</label>
                         <select class="form-control select2 pelanggan" id="id_pelanggan" name="id_pelanggan">
                             <option value="">Pelanggan</option>
@@ -131,6 +116,9 @@
                         </div>
                         <small>*tidak wajib diisi</small>
                     </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    
                 </div>
             </div>
             <div class="row">
@@ -508,31 +496,6 @@
 
     }
 
-    function calc_kembalian() {
-        var total = $("#total").val().replaceAll('.', '');
-        var bayar = $("#jumlah_bayar").val().replaceAll('.', '');
-        
-        var kembalian = $("#kembalian");
-        kembalian.val(bayar-total);
-
-        // Get the value.
-        var input = kembalian.val();            
-        input = input.replace(/[\D\s\._\-]+/g, ""); 
-        input = input?parseInt(input, 10):0; 
-        kembalian.val(function () {
-            if(kembalian.val() < 0){
-                return (input === 0)?"":"-" + input.toLocaleString("id-ID"); 
-            }else{
-                return (input === 0)?"":input.toLocaleString("id-ID"); 
-            }
-            
-        }); 
-    }
-
-    $("#jumlah_bayar").on("input", function () {
-        calc_kembalian();
-    });
-
     function getTanggal() {
         var today = new Date();
         var dd = today.getDate();
@@ -645,9 +608,34 @@
     input = input.replace(/[\D\s\._\-]+/g, ""); 
     input = input?parseInt(input, 10):0; 
     $this.val(function () {
-        return (input === 0)?"":input.toLocaleString("id-ID"); 
+        return (input === 0)?"0":input.toLocaleString("id-ID"); 
     }); 
     }); 
+
+    function calc_kembalian() {
+        var total = $("#total").val().replaceAll('.', '');
+        var bayar = $("#jumlah_bayar").val().replaceAll('.', '');
+        
+        var kembalian = $("#kembalian");
+        kembalian.val(bayar-total);
+
+        // Get the value.
+        var input = kembalian.val();            
+        input = input.replace(/[\D\s\._\-]+/g, ""); 
+        input = input?parseInt(input, 10):0; 
+        kembalian.val(function () {
+            if(kembalian.val() < 0){
+                return (input === 0)?"0":"-" + input.toLocaleString("id-ID"); 
+            }else{
+                return (input === 0)?"0":input.toLocaleString("id-ID"); 
+            }
+            
+        }); 
+    }
+
+    $("#jumlah_bayar").on("input", function () {
+        calc_kembalian();
+    });
 
 </script>
 @endsection
