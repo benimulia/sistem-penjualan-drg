@@ -80,13 +80,13 @@ class PembelianController extends Controller
         $produk = Produk::all();
         $cabang = Cabang::all();
 
-        $pembelian = DB::table('pembelian')->where('id_pembelian', $id)->first();
+        $pembelian = Pembelian::with('cabang')->where('id_pembelian', $id)->first();
         $pembelianJoin = DB::table('pembelian')
             ->join('pembelian_detail', 'pembelian.id_pembelian', '=', 'pembelian_detail.id_pembelian')
             ->select('pembelian.*', 'pembelian_detail.*')
             ->where('pembelian_detail.id_pembelian', $id)
             ->get();
-        return view('pembelian.edit', compact('pembelian', 'pembelianJoin', 'cabang', 'produk'), [
+        return view('pembelian.edit', compact('pembelian', 'pembelianJoin', 'produk'), [
             "title" => "Edit Data Pembelian"
         ]);
     }

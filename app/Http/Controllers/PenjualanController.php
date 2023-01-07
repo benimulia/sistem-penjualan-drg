@@ -93,15 +93,14 @@ class PenjualanController extends Controller
     public function edit($id)
     {
         $produk = Produk::all();
-        $cabang = Cabang::all();
 
-        $pembelian = DB::table('pembelian')->where('id_pembelian', $id)->first();
-        $pembelianJoin = DB::table('pembelian')
-            ->join('pembelian_detail', 'pembelian.id_pembelian', '=', 'pembelian_detail.id_pembelian')
-            ->select('pembelian.*', 'pembelian_detail.*')
-            ->where('pembelian_detail.id_pembelian', $id)
+        $penjualan = Penjualan::with('pelanggan','cabang')->where('id_penjualan', $id)->first();
+        $penjualanJoin = DB::table('penjualan')
+            ->join('penjualan_detail', 'penjualan.id_penjualan', '=', 'penjualan_detail.id_penjualan')
+            ->select('penjualan.*', 'penjualan_detail.*')
+            ->where('penjualan_detail.id_penjualan', $id)
             ->get();
-        return view('pembelian.edit', compact('pembelian', 'pembelianJoin', 'cabang', 'produk'), [
+        return view('penjualan.edit', compact('penjualan', 'penjualanJoin', 'produk'), [
             "title" => "Edit Data Penjualan"
         ]);
     }
@@ -198,28 +197,6 @@ class PenjualanController extends Controller
         }
     }
 
-
-    public function update($id, Request $request)
-    {
-        try {
-            DB::table('produk')->where('id_produk', $id)->update([
-                'id_cabang' => $request->id_cabang,
-                'nama_produk' => $request->nama_produk,
-                'satuan' => $request->satuan,
-                'harga_cash' => $request->harga_cash,
-                'harga_bon' => $request->harga_bon,
-                'diskon' => $request->diskon,
-                'keterangan' => $request->keterangan,
-                'updated_at' => Carbon::now(),
-                'updated_by' => auth()->user()->name,
-            ]);
-            return redirect()->route('produk.index')->with('success', 'Berhasil mengedit data');
-        } catch (Exception $e) {
-            return redirect()->route('produk.edit')->with('fail', 'Gagal mengedit data. Silahkan coba lagi');
-        }
-    }
-
-    
     public function destroy($id)
     {
         DB::beginTransaction();

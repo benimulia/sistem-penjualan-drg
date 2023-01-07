@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('style')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <!-- Styles -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
@@ -39,29 +40,23 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="pull-left">
-            <h2>Lihat Data Pembelian</h2>
+            <h2>Lihat Data Penjualan</h2>
         </div>
         <nav aria-label="breadcrumb" role="navigation">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('pembelian.index') }}">Pembelian</a></li>
-                <li class="breadcrumb-item active"><a href="#">Lihat Data Pembelian</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('penjualan.index') }}">Penjualan</a></li>
+                <li class="breadcrumb-item active"><a href="#">Lihat Data Penjualan</a></li>
             </ol>
         </nav>
     </div>
 </div>
 
-<div class="row" style="margin-bottom: 30px;">
-    <!-- <div class="col-sm-12 col-md-12">
-        <button id="btnEnableEdit" class="btn btn-info" onclick="enableInput();">Edit Data</button>
-    </div> -->
-</div>
 
 <div class="row">
     <div class="col-sm-12">
-        <form action="" method="POST">
+        <form action="" method="POST" autocomplete="off">
             @csrf
-            <input type="hidden" id="id_pembelian" name="id_pembelian">
             <div class="row">
                 <div class="col-sm-6 col-md-3">
                     @if(auth()->user()->id_cabang==1)
@@ -74,7 +69,7 @@
                     <div class="form-group">
                         <label for="id_cabang">Cabang :</label>
                         <div class="w-100"></div>
-                        <input type="text" class="form-control" id="cabang" name="cabang" value="{{$pembelian->cabang->nama_cabang}}" required disabled>
+                        <input type="text" class="form-control" id="cabang" name="cabang" value="{{$penjualan->cabang->nama_cabang}}" required disabled>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -87,10 +82,9 @@
 
                 <div class="col-sm-6 col-md-3">
                     <div class="form-group">
-                        <label for="tgl_pembelian">Tanggal Pembelian :</label>
-                        <input class="datepicker form-control px-2" type="text" id="tgl_pembelian" name="tgl_pembelian"
-                            placeholder="Masukkan tanggal pembelian.." required value="{{$pembelian->tgl_pembelian}}"
-                            disabled=true>
+                        <label for="tgl_penjualan">Tanggal Penjualan :</label>
+                        <input class="datepicker form-control px-2" type="text" id="tgl_penjualan" name="tgl_penjualan"
+                            value="{{date('Y-m-d', strtotime($penjualan->tgl_penjualan) )}}" required disabled>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -101,24 +95,26 @@
                 </div>
 
                 <div class="col-sm-6 col-md-3">
-                    <div class="form-group">
-                        <label for="supplier">Supplier :</label>
-                        <input type="text" class="form-control" id="supplier" placeholder="Masukkan nama supplier.."
-                            name="supplier" required value="{{$pembelian->supplier}}" disabled=true>
+                <div class="form-group">
+                        <label for="id_pelanggan">Pelanggan:</label>
+                        <input type="text" class="form-control" id="pelanggan" name="pelanggan" value="{{$penjualan->pelanggan->nama_pelanggan}}" required disabled>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                         <div class="invalid-feedback">
                             Please fill out this field.
                         </div>
+                        <small>*tidak wajib diisi</small>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3"></div>
+                <div class="col-sm-6 col-md-3">
+                    
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <div class="table-responsive">
-                        <table class="table table-hover table-white" id="tabelPembelian">
+                        <table class="table table-hover table-white" id="tabelPenjualan">
                             <thead>
                                 <tr>
                                     <th style="width: 20px">#</th>
@@ -129,16 +125,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($pembelianJoin as $key => $item)
+                            @foreach($penjualanJoin as $key => $item)
                                 <tr>
-                                    <input type="hidden" name="id_pembelian_detail[]" id="id_pembelian"
-                                        value="{{$item->id_pembelian_detail}}">
-                                    <td hidden class="ids">{{ $item->id_pembelian_detail }}</td>
-                                    <td>{{++$key}}</td>
+                                    <td style="wi">{{++$key}}</td>
                                     <td>
                                         <div class="form-group">
-                                            <select class="form-control" name="id_produk[]"
-                                                required disabled=true style="appearance: none;">
+                                            <select class="form-control select2 produk" id="produk" name="id_produk[]"
+                                                required disabled style="appearance: none;">
                                                 <option value="">Pilih Produk</option>
                                                 @foreach ($produk as $index => $result)
                                                 <option value="{{$result->id_produk}}" {{ ($item->
@@ -157,8 +150,7 @@
                                     <td>
                                         <div class="form-group">
                                             <input type="text" class="form-control qty" id="qty" placeholder="Qty"
-                                                maxlength="5" name="qty[]" required style="min-width:100px"
-                                                value="{{str_replace(".", "," , $item->qty)}}" disabled=true>
+                                                maxlength="5" name="qty[]" value="{{str_replace(".", "," , $item->qty)}}" required style="min-width:100px" disabled>
                                             <div class="valid-feedback">
                                                 Looks good!
                                             </div>
@@ -169,12 +161,11 @@
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <div class="d-flex">
-                                                <span class="prefix mr-2 mt-0">Rp</span>
-                                                <input type="text" class="form-control harga" id="harga"
-                                                    placeholder="Harga" maxlength="20" name="harga[]" required
-                                                    style="min-width:150px" value="{{$item->harga}}" disabled=true>
-                                            </div>
+                                        <div class="d-flex">
+                                            <span class="prefix mr-2 mt-0">Rp</span>
+                                            <input style="min-width:150px" class="form-control harga" id="harga-dropdown" name="harga[]" value="{{number_format($item->harga,0,',','.') }}" disabled>
+                                            </inpui>
+                                        </div>
                                             <div class="valid-feedback">
                                                 Looks good!
                                             </div>
@@ -188,13 +179,12 @@
                                             <span class="prefix mr-2 mt-0">Rp</span>
 
                                             <input class="form-control sub_total" style="width:200px" type="text"
-                                                id="subtotal" name="subtotal[]" readonly value="{{$item->subtotal}}">
+                                                id="subtotal" name="subtotal[]" value="{{number_format($item->subtotal,0,',','.') }}" disabled>
                                         </div>
                                     </td>
-
+                                
                                 </tr>
-
-                                @endforeach
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -211,15 +201,8 @@
                                         <div class="d-flex">
                                             <span class="prefix mr-2 mt-0">Rp</span>
                                             <input class="form-control text-right sum_total" type="text" id="sum_total"
-                                                name="sum_total" value="{{$pembelian->total_pembelian}}" readonly>
+                                                name="sum_total" value="{{number_format($penjualan->total_penjualan,0,',','.') }}" disabled>
                                         </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5" class="text-right">Tax</td>
-                                    <td>
-                                        <input class="form-control text-right" type="text" id="tax_1" name="tax_1"
-                                            value="0" readonly>
                                     </td>
                                 </tr>
                                 <tr>
@@ -232,15 +215,28 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td colspan="5" class="text-right"></td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right">Jumlah Bayar</td>
+                                    <td>
+                                        <input class="form-control text-right" type="text" id="jumlah_bayar" name="jumlah_bayar" value="{{number_format($penjualan->jumlah_bayar,0,',','.') }}" disabled>
+                                    </td>
+                                </tr>
+                                <tr class="text-white">
                                     <td colspan="5" style="text-align: right; font-weight: bold">
-                                        Grand Total
+                                     
                                     </td>
                                     <td style="font-size: 16px;width: 230px">
-                                        <div class="d-flex">
-                                            <span class="prefix mr-2 mt-0">Rp</span>
-                                            <input class="form-control text-right" type="text" id="total" name="total"
-                                                value="{{$pembelian->total_pembelian}}" readonly>
-                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right"></td>
+                                    <td>
+                                        
                                     </td>
                                 </tr>
                             </tbody>
@@ -250,12 +246,15 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Keterangan</label>
-                                <textarea class="form-control" rows="3" id="keterangan" name="keterangan" disabled=true>{{$pembelian->keterangan}}</textarea>
+                                <textarea class="form-control" rows="3" id="keterangan" name="keterangan" disabled>{{$penjualan->keterangan}}</textarea>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
+           
+            
         </form>
     </div>
 </div>

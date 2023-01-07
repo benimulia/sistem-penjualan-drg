@@ -277,13 +277,13 @@
                 </div>
             </div>
             <div class="submit-section">
-                <a href="{{route('pembelian.index')}}" class="btn btn-danger mr-2">Batal</a>
-                <a class="btn btn-primary submit-btn" href="#" data-toggle="modal" data-target="#submit-pembelian"
+                <a href="{{route('penjualan.index')}}" class="btn btn-danger mr-2">Batal</a>
+                <a class="btn btn-primary submit-btn" href="#" data-toggle="modal" data-target="#submit-penjualan"
                     title="Submit">Submit</a>
             </div>
 
             <!-- Submit Pembelian Modal -->
-            <div class="modal custom-modal fade" id="submit-pembelian" role="dialog">
+            <div class="modal custom-modal fade" id="submit-penjualan" role="dialog">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -295,8 +295,8 @@
                         </div>
 
                         <div class="modal-body">
-                            <p>Apakah anda yakin untuk submit data? Data pembelian yang sudah terbuat tidak dapat diubah!</p>
-                            <small>Stok produk akan bertambah sesuai yang tertera dalam pembelian</small>
+                            <p>Apakah anda yakin untuk submit data? Data penjualan yang sudah terbuat tidak dapat diubah!</p>
+                            <small>Stok produk akan berkurang sesuai yang tertera dalam penjualan</small>
                         </div>
 
                         <div class="modal-footer">
