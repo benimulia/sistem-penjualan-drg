@@ -59,7 +59,9 @@
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
+                        @if(auth()->user()->id_cabang==0)
                         <th class="text-center">Cabang</th>
+                        @endif
                         <th class="text-center">Nama Produk</th>
                         <th class="text-center">Stok</th>
                         <th class="text-center">Satuan</th>
@@ -77,7 +79,9 @@
                     @foreach ($produk as $index => $result)
                     <tr>
                         <td class="text-center">{{$index + 1}}</td>
+                        @if(auth()->user()->id_cabang==0)
                         <td>{{$result->cabang->nama_cabang}}</td>
+                        @endif
                         <td>{{\Illuminate\Support\Str::limit( html_entity_decode(strip_tags($result->nama_produk)), 50 )}}</td>
                         <td>{{str_replace(".", "," , $result->stok)}}</td>
                         <td>{{$result->satuan}}</td>

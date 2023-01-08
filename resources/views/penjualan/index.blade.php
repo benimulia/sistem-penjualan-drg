@@ -59,8 +59,10 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="width:20px;">No</th>
+                        @if(auth()->user()->id_cabang==0)
                         <th class="text-center">Cabang</th>
-                        <th class="text-center" style="width:120px;">Tgl</th>
+                        @endif
+                        <th class="text-center">Waktu Penjualan</th>
                         <th class="text-center" style="width:170px;">Total</th>
                         <th class="text-center" style="width:80px;">Status</th>
                         <th class="text-center" style="width:200px;">Keterangan</th>
@@ -74,8 +76,10 @@
                     @foreach ($penjualan as $index => $result)
                     <tr>
                         <td class="text-center" style="min-width:20px">{{$index + 1}}</td>
+                        @if(auth()->user()->id_cabang==0)
                         <td>{{$result->cabang->nama_cabang}}</td>
-                        <td style="min-width:120px" >{{$result->created_at}}</td>
+                        @endif
+                        <td>{{$result->created_at}}</td>
                         <td style="min-width:170px">Rp {{number_format($result->total_penjualan,0,',','.') }}</td>
                         <td style="min-width:80px">{{$result->status_transaksi}}</td>
                         <td style="min-width:200px">{{$result->keterangan}}</td>

@@ -59,20 +59,14 @@
             @csrf
             <div class="row">
                 <div class="col-sm-6 col-md-3">
-                    @if(auth()->user()->id_cabang==1)
-                    <input type="hidden" name="id_cabang" value="1">
-                    @elseif(auth()->user()->id_cabang==2)
-                    <input type="hidden" name="id_cabang" value="2">
-                    @elseif(auth()->user()->id_cabang==3)
-                    <input type="hidden" name="id_cabang" value="3">
-                    @else
+                    @if (auth()->user()->id_cabang == 0)
                     <div class="form-group">
                         <label for="id_cabang">Cabang :</label>
                         <div class="w-100"></div>
                         <select class="form-control select2" id="id_cabang" name="id_cabang" required>
                             <option value="">Pilih Cabang</option>
-                            @foreach($cabang as $result)
-                            <option value="{{$result->id_cabang}}">{{$result->nama_cabang}}</option>
+                            @foreach ($cabang as $result)
+                                <option value="{{ $result->id_cabang }}">{{ $result->nama_cabang }}</option>
                             @endforeach
                         </select>
                         <div class="valid-feedback">
@@ -82,6 +76,8 @@
                             Please fill out this field.
                         </div>
                     </div>
+                    @else
+                        <input type="hidden" name="id_cabang" value="{{ auth()->user()->id_cabang }}">
                     @endif
                 </div>
 
