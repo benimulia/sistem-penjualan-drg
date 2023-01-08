@@ -132,10 +132,7 @@ class RekapBonController extends Controller
         try {
 
             /** delete record table rekap_bayar_bon */
-            $rekapbayarbon = DB::table('rekap_bayar_bon')->where('id_bon', $id)->get();
-            foreach ($rekapbayarbon as $id_rekap_bayar_bon) {
-                DB::table('rekap_bayar_bon')->where('id_rekap_bayar_bon', $id_rekap_bayar_bon->id_rekap_bayar_bon)->delete();
-            }
+            DB::table('rekap_bayar_bon')->where('id_bon', $id)->delete();
 
             /** delete record table rekap_bon */
             RekapBon::destroy($id);
@@ -145,7 +142,7 @@ class RekapBonController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->with('fail', 'Gagal menghapus data. Silahkan coba lagi');
+            return redirect()->back()->with('fail', 'Gagal menghapus data. Silahkan coba lagi');
         }
     }
 }

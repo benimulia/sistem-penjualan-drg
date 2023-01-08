@@ -60,7 +60,7 @@ class RekapBayarBonController extends Controller
     public function store($id,Request $request)
     {
         DB::beginTransaction();
-
+        try {
             $jml_bayar = (int) str_replace(".", "", $request->jumlah_cicil);
 
             $rekapbon = RekapBon::where('id_bon', $id)->first();
@@ -72,12 +72,17 @@ class RekapBayarBonController extends Controller
             $jumlahterbayarupdate = $jumlahterbayar + $jml_bayar;
 
             if($jumlahterbayarupdate == $jumlahbon){
-                $penjualan = Penjualan::where('id_penjualan', $rekapbon->id_penjualan)->first();
-                $updatepenjualan = [
-                    'status_transaksi' => "Lunas",
-                    'updated_by' => "bayar bon - " . auth()->user()->name,
-                    'updated_date' => Carbon::now(),
-                ];
+
+                if($rekapbon->id_penjualan != null){
+                    $penjualan = Penjualan::where('id_penjualan', $rekapbon->id_penjualan)->first();
+                    $updatepenjualan = [
+                        'status_transaksi' => "Lunas",
+                        'updated_by' => "bayar bon - " . auth()->user()->name,
+                        'updated_date' => Carbon::now(),
+                    ];
+
+                    $penjualan->update($updatepenjualan);
+                }
 
                 $update = [
                     'jumlah_terbayar' => $jumlahterbayarupdate,
@@ -87,7 +92,7 @@ class RekapBayarBonController extends Controller
                 ];
 
                 $rekapbon->update($update);
-                $penjualan->update($updatepenjualan);
+                
             }
             elseif($jumlahterbayarupdate < $jumlahbon){
                 $update = [
@@ -113,7 +118,11 @@ class RekapBayarBonController extends Controller
     
     
             DB::commit();
-            return redirect()->back()->with('success', 'Berhasil menambahkan data bayar bon');
+            return redirect()->route('rekapbon.edit', ['id' => $rekapbon->id_bon])->with('success', 'Berhasil menambahkan data bayar bon');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fail', 'Gagal menambahkan data. Silahkan coba lagi');
+        }
+            
     }
 
     public function update($id, Request $request)
