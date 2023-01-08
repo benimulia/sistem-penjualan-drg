@@ -161,7 +161,7 @@ class PenjualanController extends Controller
                     $bon->id_penjualan = $id_penjualan;
                     $bon->tgl_bon = $request->tgl_penjualan;
                     $bon->total = $total - $jml_bayar;
-                    $bon->jumlah_terbayar = 0;
+                    $bon->jumlah_terbayar = $jml_bayar;
                     $bon->status = "Belum Lunas";
                     $bon->created_by = auth()->user()->name;
                     $bon->updated_by = auth()->user()->name;
@@ -206,14 +206,15 @@ class PenjualanController extends Controller
                 DB::table('penjualan_detail')->where('id_penjualan_detail', $id_penjualan_detail->id_penjualan_detail)->delete();
             }
 
-            $rekap_bon = DB::table('rekap_bon')->where('id_penjualan', $id)->get();
-            foreach ($rekap_bon as $id_rekap_bon) {
-                DB::table('rekap_bayar_bon')->where('id_bon', $id_rekap_bon->id_bon)->delete();
+            $penjualan = Penjualan::where('id_penjualan', $id)->first();
+            if($penjualan->jenis_transaksi == "Bon"){
+                $rekap_bon = RekapBon::where('id_penjualan', $id)->first();
+                $id_rekap_bon = $rekap_bon->id_bon;
+    
+                DB::table('rekap_bayar_bon')->where('id_bon', $id_rekap_bon)->delete();
+                /** delete record table rekap_bon */
+                RekapBon::destroy($id_rekap_bon);
             }
-
-            /** delete record table rekap_bon */
-            RekapBon::destroy($id);
-
             /** delete record table penjualan */
             Penjualan::destroy($id);
 
@@ -221,7 +222,7 @@ class PenjualanController extends Controller
             return redirect()->back()->with('success', 'Berhasil menghapus data');
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->with('fail', 'Gagal menghapus data. Silahkan coba lagi');
+            return redirect()->back()->with('fail', 'Gagal menghapus data. Silahkan coba lagi');
         }
     }
 

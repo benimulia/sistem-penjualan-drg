@@ -37,21 +37,21 @@
 
     <!-- Content Row -->
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Rekap Bon</h1>
-    <p class="mb-4">Halaman ini digunakan untuk menampilkan dan mengelola daftar rekap bon.</p>
+    <h1 class="h3 mb-2 text-gray-800">Rekap Bayar Bon</h1>
+    <p class="mb-4">Halaman ini digunakan untuk menampilkan dan mengelola daftar rekap bayar bon.</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Rekap Bon</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Rekap Bayar Bon</h6>
         </div>
         <div class="card-body">
             <div class="row ml-0">
-                <a href="{{ route('rekapbon.create') }}" class="btn btn-primary btn-icon-split">
+                <a href="{{ route('rekapbayarbon.create') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                     </span>
-                    <span class="text">Tambah Rekap Bon</span>
+                    <span class="text">Bayar Bon</span>
                 </a>
             </div>
             <div class="my-4"></div>
@@ -60,50 +60,51 @@
                     <thead>
                         <tr>
                             <th class="text-center">No</th>
-                            @if(auth()->user()->id_cabang==0)
+                            @if (auth()->user()->id_cabang == 0)
                                 <th class="text-center">Cabang</th>
                             @endif
                             <th class="text-center">Pelanggan</th>
                             <th class="text-center">Tgl Bon</th>
                             <th class="text-center">Total Bon</th>
-                            <th class="text-center">Jumlah Terbayar</th>
-                            <th class="text-center">Status</th>
+                            <th class="text-center">Jumlah Sudah Bayar</th>
+                            <th class="text-center">Tgl Bayar</th>
+                            <th class="text-center">Jumlah Bayar</th>
                             <th class="text-center">Keterangan</th>
-                            <th class="text-center">Updated By</th>
+                            <th class="text-center">Created By</th>
                             <th data-orderable="false"></th>
                             <th data-orderable="false"></th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach ($rekapbon as $index => $result)
+                        @foreach ($rekapbayarbon as $index => $result)
                             <tr>
                                 <td class="text-center">{{ $index + 1 }}</td>
-                                @if(auth()->user()->id_cabang==0)
+                                @if (auth()->user()->id_cabang == 0)
                                     <td>{{ $result->cabang->nama_cabang }}</td>
                                 @endif
-                                <td>{{$result->pelanggan->nama_pelanggan}}</td>
-                                <td>{{$result->tgl_bon}}</td>
-                                <td>Rp {{ number_format($result->total, 0, ',', '.') }}</td>
-                                <td>Rp {{ number_format($result->jumlah_terbayar, 0, ',', '.') }}</td>
-                                <td>{{$result->status}}</td>
-                                <td>{{$result->keterangan}}</td>
-                                <td>{{ $result->updated_by }}</td>
+                                <td>{{ $result->bon->pelanggan->nama_pelanggan }}</td>
+                                <td>{{ $result->bon->tgl_bon }}</td>
+                                <td>Rp {{ number_format($result->bon->total, 0, ',', '.') }}</td>
+                                <td>Rp {{ number_format($result->bon->jumlah_terbayar, 0, ',', '.') }}</td>
+                                <td>{{ $result->tgl_bayar }}</td>
+                                <td>Rp {{ number_format($result->bon->jumlah_cicil, 0, ',', '.') }}</td>
+                                <td>{{ $result->keterangan }}</td>
+                                <td>{{ $result->created_by }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('rekapbon.edit', ['id' => $result->id_bon]) }}"
+                                    <a href="{{ route('rekapbayarbon.edit', ['id' => $result->id_bayar_bon]) }}"
                                         class="btn btn-success text-light btb-circle" id="edit-cabang">
-                                        <i class="fas fa-eye"></i>
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
                                 <td class="text-center">
-                                    <a data-id="{!! $result->id_bon !!}"
-                                        data-target="#previewModal-{{ $result->id_bon }}" data-toggle="modal"
-                                        class="btn btn-danger btn-circle">
+                                    <a data-id="{!! $result->id_bayar_bon !!}" data-target="#previewModal-{{ $result->id_bayar_bon }}"
+                                        data-toggle="modal" class="btn btn-danger btn-circle">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
                                 <!-- Modal HTML -->
-                                <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_bon }}">
+                                <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_bayar_bon }}">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header bg-warning dark">
@@ -120,7 +121,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Batal</button>
-                                                <a href="{{ route('rekapbon.destroy', ['id' => $result->id_bon]) }}"
+                                                <a href="{{ route('rekapbon.destroy', ['id' => $result->id_bayar_bon]) }}"
                                                     class="btn btn-danger text-light">
                                                     Hapus
                                                 </a>
@@ -143,7 +144,7 @@
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script> -->
+            <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script> -->
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>

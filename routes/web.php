@@ -2,12 +2,12 @@
 
 
 use App\Http\Controllers\RekapBonController;
+use App\Http\Controllers\RekapBayarBonController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
@@ -84,4 +84,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/rekapbon/edit/{id}', [RekapBonController::class, 'edit'])->name('rekapbon.edit');
     Route::post('/rekapbon/update/{id}', [RekapBonController::class, 'update'])->name('rekapbon.update');
     Route::get('/rekapbon/delete/{id}', [RekapBonController::class, 'destroy'])->name('rekapbon.destroy');
+
+    // ================== REKAP BAYAR BON ==================
+    Route::get('/rekapbayarbon', [RekapBayarBonController::class, 'index'])->name('rekapbayarbon.index');
+    Route::get('/rekapbayarbon/create/{id}', [RekapBayarBonController::class, 'create'])->name('rekapbayarbon.create');
+    Route::post('/rekapbayarbon/store/{id}', [RekapBayarBonController::class, 'store'])->name('rekapbayarbon.store');
+    Route::get('/rekapbayarbon/edit/{id}', [RekapBayarBonController::class, 'edit'])->name('rekapbayarbon.edit');
+    Route::post('/rekapbayarbon/update/{id}', [RekapBayarBonController::class, 'update'])->name('rekapbayarbon.update');
+    Route::get('/rekapbayarbon/delete/{id}', [RekapBayarBonController::class, 'destroy'])->name('rekapbayarbon.destroy');
 });

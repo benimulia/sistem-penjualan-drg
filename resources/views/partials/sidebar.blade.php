@@ -82,16 +82,16 @@
         Bon
     </div>
 
-    @can('penjualan-list')
+    @can('rekapbon-list')
     <li class="nav-item {{ (request()->is('rekapbon*')) ? 'active' : '' }}" >
         <a class="nav-link" href="{{ route('rekapbon.index') }}">
-            <i class="fas fa-fw fa-wallet"></i>
+            <i class="fas fa-fw fa-file-invoice"></i>
             <span>Rekap Bon</span>
         </a>
     </li>
     @endcan
 
-    @can(['role-list','user-list','cabang-list'])
+    {{-- @can(['role-list','user-list','cabang-list']) --}}
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
@@ -103,14 +103,21 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Menu Setting:</h6>
-
+                @can('role-list')
                 <a class="collapse-item" href="{{ route('roles.index') }}">Kelola Role</a>
+                @endcan
+                @can('user-list')
                 <a class="collapse-item" href="{{ route('users.index') }}">Kelola Users</a>
+                @endcan
+                @can('cabang-list')
                 <a class="collapse-item" href="{{ route('cabang.index') }}">Cabang</a>
+                @endcan
+
+                <a class="collapse-item" href="">Kelola Profil</a>
             </div>
         </div>
     </li>
-    @endcan
+    {{-- @endcan --}}
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

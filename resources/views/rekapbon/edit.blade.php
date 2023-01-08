@@ -52,10 +52,11 @@
     </div>
     <div class="row" style="margin-bottom: 30px;">
         <div class="col-sm-12 col-md-12">
-            <button id="btnEnableEdit" class="btn btn-info" onclick="enableInput();">Edit Data</button>
+            <button id="btnEnableEdit" class="btn btn-info" onclick="enableInput();"> <i class="fas fa-fw fa-edit"></i> Edit Data</button>
             @if($rekapbon->id_penjualan != NULL)
-            <a href="{{ route('penjualan.edit', ['id' => $rekapbon->penjualan->id_penjualan]) }}" class="btn btn-warning" target="_blank">Lihat Transaksi</a>
+            <a href="{{ route('penjualan.edit', ['id' => $rekapbon->penjualan->id_penjualan]) }}" class="btn btn-info" target="_blank"> <i class="fas fa-fw fa-eye"></i> Lihat Transaksi</a>
             @endif
+            <a href="{{ route('rekapbayarbon.create', ['id' => $rekapbon->id_bon]) }}" class="btn btn-info"> <i class="fas fa-fw fa-money-bill-wave"></i> Bayar Bon</a>
         </div>
     </div>
     <div class="row">
@@ -73,7 +74,7 @@
                             <option value="">Pilih Cabang</option>
                             @foreach ($cabang as $result)
                                 <option value="{{ $result->id_cabang }}"
-                                    {{ $relapbon->id_cabang == $result->id_cabang ? 'selected' : '' }}>
+                                    {{ $rekapbon->id_cabang == $result->id_cabang ? 'selected' : '' }}>
                                     {{ $result->nama_cabang }}</option>
                             @endforeach
                         </select>
@@ -151,7 +152,7 @@
                 </div>
 
                 <div class="">
-                    <a href="{{ route('rekapbon.index') }}" class="btn btn-danger mr-2">Cancel</a>
+                    <a href="{{ route('rekapbon.index') }}" class="btn btn-danger mr-2">Kembali</a>
                     <a href="#myModal" id="btnUpdate" data-toggle="modal" class="btn btn-success"
                         style="display: none;">Update </a>
                 </div>
