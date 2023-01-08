@@ -13,7 +13,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Menu
+        Master
     </div>
 
     <!-- Nav Item - Charts -->
@@ -43,6 +43,12 @@
     </li>
     @endcan
 
+    <hr class="sidebar-divider d-none d-md-block">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Transaksi
+    </div>
+
     @can('pembelian-list')
     <li class="nav-item {{ (request()->is('pembelian*')) ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('pembelian.index') }}">
@@ -53,7 +59,7 @@
     @endcan
 
     @can('penjualan-list')
-    <li class="nav-item {{ (request()->is('penjualan*')) ? 'active' : '' }}" >
+    <li class="nav-item {{ (request()->is('penjualan','penjualan/edit*')) ? 'active' : '' }}" >
         <a class="nav-link" href="{{ route('penjualan.index') }}">
             <i class="fas fa-fw fa-cash-register"></i>
             <span>Transaksi Jual</span>
@@ -61,7 +67,31 @@
     </li>
     @endcan
 
-    @can(['role-list','user-list'])
+    @can('penjualan-create')
+    <li class="nav-item {{ (request()->is('penjualan/create*')) ? 'active' : '' }}" >
+        <a class="nav-link" href="{{ route('penjualan.create') }}">
+            <i class="fas fa-fw fa-plus"></i>
+            <span>Buat Transaksi Baru</span>
+        </a>
+    </li>
+    @endcan
+
+    <hr class="sidebar-divider d-none d-md-block">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Bon
+    </div>
+
+    @can('penjualan-list')
+    <li class="nav-item {{ (request()->is('rekapbon*')) ? 'active' : '' }}" >
+        <a class="nav-link" href="{{ route('rekapbon.index') }}">
+            <i class="fas fa-fw fa-wallet"></i>
+            <span>Rekap Bon</span>
+        </a>
+    </li>
+    @endcan
+
+    @can(['role-list','user-list','cabang-list'])
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

@@ -17,7 +17,7 @@ class CreateRekapBonTable extends Migration
             $table->bigIncrements('id_bon');
             $table->integer('id_cabang');
             $table->integer('id_pelanggan');
-            $table->integer('id_penjualan');
+            $table->integer('id_penjualan')->nullable();
             $table->date('tgl_bon');
             $table->integer('total');
             $table->integer('jumlah_terbayar');

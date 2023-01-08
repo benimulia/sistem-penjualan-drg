@@ -159,7 +159,7 @@ class PembelianController extends Controller
 
             /** delete record table pembelian_detail */
             $pembeliandetail = DB::table('pembelian_detail')->where('id_pembelian', $id)->get();
-            foreach ($pembeliandetail as $key => $id_pembelian_detail) {
+            foreach ($pembeliandetail as $id_pembelian_detail) {
                 $stokproduk = DB::table('produk')->where('id_produk', $id_pembelian_detail->id_produk)->select('stok')->first();
                 $stokproduk = $stokproduk->stok;
 

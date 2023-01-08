@@ -22,8 +22,6 @@ class Penjualan extends Model
             'keterangan',
             'created_by',
             'updated_by',
-
-
     ];
 
     public function penjualandetail()
@@ -39,6 +37,11 @@ class Penjualan extends Model
     public function pelanggan()
     {
         return $this->hasOne(Pelanggan::class, 'id_pelanggan', 'id_pelanggan');
+    }
+
+    public function rekapbon()
+    {
+        return $this->hasOne(RekapBon::class, 'id_penjualan', 'id_penjualan');
     }
 }
 

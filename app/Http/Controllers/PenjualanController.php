@@ -192,7 +192,7 @@ class PenjualanController extends Controller
         try {
             /** delete record table penjualan_detail */
             $penjualandetail = DB::table('penjualan_detail')->where('id_penjualan', $id)->get();
-            foreach ($penjualandetail as $key => $id_penjualan_detail) {
+            foreach ($penjualandetail as $id_penjualan_detail) {
                 $stokproduk = DB::table('produk')->where('id_produk', $id_penjualan_detail->id_produk)->select('stok')->first();
                 $stokproduk = $stokproduk->stok;
 
@@ -207,7 +207,7 @@ class PenjualanController extends Controller
             }
 
             $rekap_bon = DB::table('rekap_bon')->where('id_penjualan', $id)->get();
-            foreach ($rekap_bon as $key => $id_rekap_bon) {
+            foreach ($rekap_bon as $id_rekap_bon) {
                 DB::table('rekap_bayar_bon')->where('id_bon', $id_rekap_bon->id_bon)->delete();
             }
 

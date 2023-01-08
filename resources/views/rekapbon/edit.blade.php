@@ -39,13 +39,13 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="pull-left">
-                <h2>Edit Produk </h2>
+                <h2>Edit Rekap Bon </h2>
             </div>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('produk.index') }}">Produk</a></li>
-                    <li class="breadcrumb-item"><a href="#">Edit Produk</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('rekapbon.index') }}">Rekap Bon</a></li>
+                    <li class="breadcrumb-item"><a href="#">Edit Rekap Bon</a></li>
                 </ol>
             </nav>
         </div>
@@ -53,16 +53,18 @@
     <div class="row" style="margin-bottom: 30px;">
         <div class="col-sm-12 col-md-12">
             <button id="btnEnableEdit" class="btn btn-info" onclick="enableInput();">Edit Data</button>
+            @if($rekapbon->id_penjualan != NULL)
+            <a href="{{ route('penjualan.edit', ['id' => $rekapbon->penjualan->id_penjualan]) }}" class="btn btn-warning" target="_blank">Lihat Transaksi</a>
+            @endif
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <form id="produkForm" class="needs-validation" novalidate
-                action="{{ route('produk.update', ['id' => $produk->id_produk]) }}" method="POST"
+            <form id="rekapbonForm" class="needs-validation" novalidate
+                action="{{ route('rekapbon.update', ['id' => $rekapbon->id_bon]) }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" id="id_produk" name="id_produk">
-
+                <input type="hidden" id="id_bon" name="id_bon">
                 @if (auth()->user()->id_cabang == 0)
                     <div class="form-group">
                         <label for="id_cabang">Cabang :</label>
@@ -71,7 +73,7 @@
                             <option value="">Pilih Cabang</option>
                             @foreach ($cabang as $result)
                                 <option value="{{ $result->id_cabang }}"
-                                    {{ $produk->id_cabang == $result->id_cabang ? 'selected' : '' }}>
+                                    {{ $relapbon->id_cabang == $result->id_cabang ? 'selected' : '' }}>
                                     {{ $result->nama_cabang }}</option>
                             @endforeach
                         </select>
@@ -87,41 +89,12 @@
                 @endif
 
                 <div class="form-group">
-                    <label for="nama_produk">Nama Produk :</label>
-                    <input type="text" class="form-control" id="nama_produk" placeholder="Masukkan nama produk.."
-                        name="nama_produk" required value="{{ $produk->nama_produk }}" disabled=true>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please fill out this field.
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="stok">Stok :</label>
-                    <input type="number" class="form-control" id="stok" placeholder="Masukkan stok produk.."
-                        name="stok" required onkeypress='validateInt(event)' value="{{ $produk->stok }}"
-                        disabled=true>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please fill out this field.
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="satuan">Satuan :</label>
-                    <div class="w-100"></div>
-                    <select class="form-control select2" id="satuan" name="satuan" required disabled=true>
-                        <option value="">Pilih Satuan</option>
-                        <option value="ikat" {{ $produk->satuan == 'ikat' ? 'selected' : '' }}>ikat</option>
-                        <option value="botol" {{ $produk->satuan == 'botol' ? 'selected' : '' }}>botol</option>
-                        <option value="bungkus" {{ $produk->satuan == 'bungkus' ? 'selected' : '' }}>bungkus</option>
-                        <option value="butir" {{ $produk->satuan == 'butir' ? 'selected' : '' }}>butir</option>
-                        <option value="kg" {{ $produk->satuan == 'kg' ? 'selected' : '' }}>kg</option>
-                        <option value="pieces" {{ $produk->satuan == 'pieces' ? 'selected' : '' }}>pieces</option>
-                        <option value="tray" {{ $produk->satuan == 'tray' ? 'selected' : '' }}>tray</option>
+                    <label for="id_pelanggan">Nama Pelanggan :</label>
+                    <select class="form-control select2" id="id_pelanggan" name="id_pelanggan" disabled required>
+                        <option value="">Pilih Pelanggan</option>
+                        @foreach ($pelanggan as $result)
+                            <option value="{{ $result->id_pelanggan }}" {{ $rekapbon->id_pelanggan == $result->id_pelanggan ? 'selected' : '' }}>{{ $result->nama_pelanggan }}</option>
+                        @endforeach
                     </select>
                     <div class="valid-feedback">
                         Looks good!
@@ -130,11 +103,23 @@
                         Please fill out this field.
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="harga_cash">Harga Cash :</label>
-                    <input type="number" class="form-control" id="harga_cash"
-                        placeholder="Masukkan harga cash produk.." name="harga_cash" required
-                        onkeypress='validateInt(event)' value="{{ $produk->harga_cash }}" disabled=true>
+                    <label for="tgl_bon">Tanggal Bon :</label>
+                    <input class="datepicker form-control px-2" type="text" id="tgl_bon" name="tgl_bon"
+                        placeholder="Masukkan tanggal bon.." value="{{ $rekapbon->tgl_bon }}" disabled required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please fill out this field.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="total">Jumlah Bon :</label>
+                    <input class="form-control angka" type="text" id="total" name="total"
+                        value="{{ number_format($rekapbon->total, 0, ',', '.') }}" disabled required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -143,10 +128,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="harga_bon">Harga Bon :</label>
-                    <input type="number" class="form-control" id="harga_bon" placeholder="Masukkan harga bon produk.."
-                        name="harga_bon" required onkeypress='validateInt(event)' value="{{ $produk->harga_bon }}"
-                        disabled=true>
+                    <label for="jumlah_terbayar">Jumlah Terbayar :</label>
+                    <input class="form-control angka" type="text" id="jumlah_terbayar" name="jumlah_terbayar"
+                        value="{{ number_format($rekapbon->jumlah_terbayar, 0, ',', '.') }}" disabled required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -155,10 +139,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="harga_beli">Harga Beli :</label>
-                    <input type="number" class="form-control" id="harga_beli"
-                        placeholder="Masukkan harga beli produk.." name="harga_beli" required
-                        onkeypress='validateInt(event)' value="{{ $produk->harga_beli }}" disabled=true>
+                    <label for="keterangan">Keterangan :</label>
+                    <textarea class="form-control" rows="3" id="keterangan" name="keterangan" disabled>{{ $rekapbon->keterangan }}</textarea>
+                    <small>*tidak wajib diisi</small>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -166,23 +149,11 @@
                         Please fill out this field.
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="diskon">Diskon :</label>
-                    <input type="number" class="form-control" id="diskon" placeholder="Masukkan diskon produk.."
-                        name="diskon" required onkeypress='validateInt(event)' value="{{ $produk->diskon }}"
-                        disabled=true>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please fill out this field.
-                    </div>
-                </div>
+
                 <div class="">
-                    <a href="{{ route('produk.index') }}" class="btn btn-danger mr-2">Cancel</a>
+                    <a href="{{ route('rekapbon.index') }}" class="btn btn-danger mr-2">Cancel</a>
                     <a href="#myModal" id="btnUpdate" data-toggle="modal" class="btn btn-success"
                         style="display: none;">Update </a>
-
                 </div>
 
                 <!-- Modal HTML -->
@@ -215,6 +186,10 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
+        rel="stylesheet" />
 @endsection
 
 @section('footer-script')
@@ -229,8 +204,8 @@
                 allowClear: true,
                 theme: "bootstrap-5",
             });
-            $('#satuan').select2({
-                placeholder: "Pilih Satuan",
+            $('#id_pelanggan').select2({
+                placeholder: "Pilih Pelanggan",
                 allowClear: true,
                 theme: "bootstrap-5",
             });
@@ -259,23 +234,32 @@
             }, false);
         })();
 
-        function validateInt(evt) {
-            var theEvent = evt || window.event;
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+            endDate: new Date(new Date().setDate(new Date().getDate()))
+        });
 
-            // Handle paste
-            if (theEvent.type === 'paste') {
-                key = event.clipboardData.getData('text/plain');
-            } else {
-                // Handle key press
-                var key = theEvent.keyCode || theEvent.which;
-                key = String.fromCharCode(key);
+        $(".angka").on("keyup", function(event) {
+            // When user select text in the document, also abort.
+            var selection = window.getSelection().toString();
+            if (selection !== '') {
+                return;
             }
-            var regex = /[0-9]|\./;
-            if (!regex.test(key)) {
-                theEvent.returnValue = false;
-                if (theEvent.preventDefault) theEvent.preventDefault();
+            // When the arrow keys are pressed, abort.
+            if ($.inArray(event.keyCode, [38, 40, 37, 39]) !== -1) {
+                return;
             }
-        }
+            var $this = $(this);
+            // Get the value.
+            var input = $this.val();
+            input = input.replace(/[\D\s\._\-]+/g, "");
+            input = input ? parseInt(input, 10) : 0;
+            $this.val(function() {
+                return (input === 0) ? "0" : input.toLocaleString("id-ID");
+            });
+        });
 
         function enableInput() {
             var inputs = document.getElementsByClassName('form-control');

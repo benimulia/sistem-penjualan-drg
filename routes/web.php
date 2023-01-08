@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\RekapBonController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
@@ -76,4 +77,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/penjualan/fetch', [PenjualanController::class, 'fetch'])->name('penjualan.fetch');
 
+    // ================== REKAP BON ==================
+    Route::get('/rekapbon', [RekapBonController::class, 'index'])->name('rekapbon.index');
+    Route::get('/rekapbon/create', [RekapBonController::class, 'create'])->name('rekapbon.create');
+    Route::post('/rekapbon/store', [RekapBonController::class, 'store'])->name('rekapbon.store');
+    Route::get('/rekapbon/edit/{id}', [RekapBonController::class, 'edit'])->name('rekapbon.edit');
+    Route::post('/rekapbon/update/{id}', [RekapBonController::class, 'update'])->name('rekapbon.update');
+    Route::get('/rekapbon/delete/{id}', [RekapBonController::class, 'destroy'])->name('rekapbon.destroy');
 });

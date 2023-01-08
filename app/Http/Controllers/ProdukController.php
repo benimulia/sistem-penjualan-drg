@@ -106,7 +106,7 @@ class ProdukController extends Controller
             ]);
             return redirect()->route('produk.index')->with('success', 'Berhasil mengedit data');
         } catch (Exception $e) {
-            return redirect()->route('produk.edit')->with('fail', 'Gagal mengedit data. Silahkan coba lagi');
+            return redirect()->back()->with('fail', 'Gagal mengedit data. Silahkan coba lagi');
         }
     }
 

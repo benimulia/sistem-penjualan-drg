@@ -50,6 +50,10 @@ class PermissionTableSeeder extends Seeder
             'penjualan-create',
             'penjualan-edit',
             'penjualan-delete',
+            'rekapbon-list',
+            'rekapbon-create',
+            'rekapbon-edit',
+            'rekapbon-delete',
         ];
 
         foreach ($permissions as $permission) {
