@@ -25,27 +25,17 @@ class ProdukController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if ($user->id_cabang == 1) {
-            $produk = Produk::with('cabang')->latest()->where('id_cabang', 1)->get();
-            return view('produk.index', compact('produk'), [
-                "title" => "List Produk"
-            ]);
-        } elseif ($user->id_cabang == 2) {
-            $produk = Produk::with('cabang')->latest()->where('id_cabang', 2)->get();
-            return view('produk.index', compact('produk'), [
-                "title" => "List Produk"
-            ]);
-        } elseif ($user->id_cabang == 3) {
-            $produk = Produk::with('cabang')->latest()->where('id_cabang', 3)->get();
-            return view('produk.index', compact('produk'), [
-                "title" => "List Produk"
-            ]);
-        } else {
+        $id_cabang = $user->id_cabang;
+
+        if ($id_cabang == 0) {
             $produk = Produk::with('cabang')->latest()->get();
-            return view('produk.index', compact('produk'), [
-                "title" => "List Produk"
-            ]);
+        }else{
+            $produk = Produk::with('cabang')->latest()->where('id_cabang', $id_cabang)->get();
         }
+
+        return view('produk.index', compact('produk'), [
+            "title" => "List Produk"
+        ]);
 
     }
 

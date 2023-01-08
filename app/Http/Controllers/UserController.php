@@ -2,6 +2,7 @@
     
 namespace App\Http\Controllers;
     
+use App\Models\Cabang;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -43,7 +44,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::pluck('name','name')->all();
-        return view('users.create',compact('roles'),[
+        $cabang = Cabang::orderBy('nama_cabang', 'ASC')->pluck('nama_cabang','nama_cabang');
+        return view('users.create',compact('roles','cabang'),[
             "title" => "Tambah User"
         ]);
     }

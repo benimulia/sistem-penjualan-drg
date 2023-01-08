@@ -34,40 +34,29 @@ class PenjualanController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if ($user->id_cabang == 1) {
-            $penjualan = Penjualan::with('cabang')->latest()->where('id_cabang', 1)->get();
-            return view('penjualan.index', compact('penjualan'), [
-                "title" => "List Penjualan"
-            ]);
-        } elseif ($user->id_cabang == 2) {
-            $penjualan = Penjualan::with('cabang')->latest()->where('id_cabang', 2)->get();
-            return view('penjualan.index', compact('penjualan'), [
-                "title" => "List Penjualan"
-            ]);
-        } elseif ($user->id_cabang == 3) {
-            $penjualan = Penjualan::with('cabang')->latest()->where('id_cabang', 3)->get();
-            return view('penjualan.index', compact('penjualan'), [
-                "title" => "List Penjualan"
-            ]);
-        } else {
+        $id_cabang = $user->id_cabang;
+
+        if ($id_cabang == 0) {
             $penjualan = Penjualan::with('cabang')->latest()->get();
-            return view('penjualan.index', compact('penjualan'), [
-                "title" => "List Penjualan"
-            ]);
+        }else{
+            $penjualan = Penjualan::with('cabang')->latest()->where('id_cabang', $id_cabang)->get();
         }
+
+        return view('penjualan.index', compact('penjualan'), [
+            "title" => "List Penjualan"
+        ]);
+
     }
 
     public function create()
     {
         $user = auth()->user();
-        if ($user->id_cabang == 1) {
-            $produk = Produk::with('cabang')->where('id_cabang', 1)->orderBy('nama_produk', 'ASC')->get();
-        } elseif ($user->id_cabang == 2) {
-            $produk = Produk::with('cabang')->where('id_cabang', 2)->orderBy('nama_produk', 'ASC')->get();
-        } elseif ($user->id_cabang == 3) {
-            $produk = Produk::with('cabang')->where('id_cabang', 3)->orderBy('nama_produk', 'ASC')->get();
-        } else {
+        $id_cabang = $user->id_cabang;
+
+        if ($id_cabang == 0) {
             $produk = Produk::orderBy('nama_produk', 'ASC')->get();
+        }else{
+            $produk = Produk::with('cabang')->where('id_cabang', $id_cabang)->orderBy('nama_produk', 'ASC')->get();
         }
 
         $pelanggan = Pelanggan::all();

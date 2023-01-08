@@ -59,7 +59,9 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="width:20px;">No</th>
+                        @if(auth()->user()->id_cabang==0)
                         <th class="text-center">Cabang</th>
+                        @endif
                         <th class="text-center" style="width:120px;">Tgl Pembelian</th>
                         <th class="text-center">Supplier</th>
                         <th class="text-center" style="width:170px;">Total Pembelian</th>
@@ -75,13 +77,15 @@
                     @foreach ($pembelian as $index => $result)
                     <tr>
                         <td class="text-center" style="min-width:20px">{{$index + 1}}</td>
+                        @if(auth()->user()->id_cabang==0)
                         <td>{{$result->cabang->nama_cabang}}</td>
-                        <td style="min-width:120px" >{{$result->tgl_pembelian}}</td>
+                        @endif
+                        <td>{{$result->tgl_pembelian}}</td>
                         <td>{{$result->supplier}}</td>
-                        <td style="min-width:170px">Rp {{number_format($result->total_pembelian,0,',','.') }}</td>
-                        <td style="min-width:200px">{{$result->keterangan}}</td>
+                        <td>Rp {{number_format($result->total_pembelian,0,',','.') }}</td>
+                        <td>{{$result->keterangan}}</td>
                         <td>{{$result->created_by}}</td>
-                        <td style="min-width:120px">{{$result->created_at}}</td>
+                        <td>{{$result->created_at}}</td>
                         <td class="text-center">
                             <a href="{{ route('pembelian.edit',['id' => $result->id_pembelian]) }}" class="btn btn-success text-light btb-circle" id="edit-pembelian">
                                 <i class="fas fa-eye"></i>

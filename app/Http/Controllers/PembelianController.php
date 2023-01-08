@@ -31,46 +31,33 @@ class PembelianController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if ($user->id_cabang == 1) {
-            $pembelian = Pembelian::with('cabang')->latest()->where('id_cabang', 1)->get();
-            return view('pembelian.index', compact('pembelian'), [
-                "title" => "List Pembelian"
-            ]);
-        } elseif ($user->id_cabang == 2) {
-            $pembelian = Pembelian::with('cabang')->latest()->where('id_cabang', 2)->get();
-            return view('pembelian.index', compact('pembelian'), [
-                "title" => "List Pembelian"
-            ]);
-        } elseif ($user->id_cabang == 3) {
-            $pembelian = Pembelian::with('cabang')->latest()->where('id_cabang', 3)->get();
-            return view('pembelian.index', compact('pembelian'), [
-                "title" => "List Pembelian"
-            ]);
-        } else {
+        $id_cabang = $user->id_cabang;
+
+        if ($id_cabang == 0) {
             $pembelian = Pembelian::with('cabang')->latest()->get();
-            return view('pembelian.index', compact('pembelian'), [
-                "title" => "List Pembelian"
-            ]);
+        }else{
+            $pembelian = Pembelian::with('cabang')->latest()->where('id_cabang', $id_cabang)->get();
         }
+
+        return view('pembelian.index', compact('pembelian'), [
+            "title" => "List Pembelian"
+        ]);
 
     }
 
     public function create()
     {
         $user = auth()->user();
-        if ($user->id_cabang==1){
-            $produk = Produk::with('cabang')->where('id_cabang',1)->orderBy('nama_produk','ASC')->get();
-        }elseif($user->id_cabang==2){
-            $produk = Produk::with('cabang')->where('id_cabang',2)->orderBy('nama_produk','ASC')->get();
-        }elseif($user->id_cabang==3){
-            $produk = Produk::with('cabang')->where('id_cabang',3)->orderBy('nama_produk','ASC')->get();
-        }
-        else{
+        $id_cabang = $user->id_cabang;
+
+        if ($id_cabang == 0) {
             $produk = Produk::orderBy('nama_produk','ASC')->get();
+        }else{
+            $produk = Produk::with('cabang')->where('id_cabang',$id_cabang)->orderBy('nama_produk','ASC')->get();
         }
 
         $cabang = Cabang::all();
-        return view('pembelian.create', compact('produk', 'cabang',), [
+        return view('pembelian.create', compact('produk', 'cabang'), [
             "title" => "Tambah Pembelian"
         ]);
     }
