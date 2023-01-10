@@ -45,6 +45,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Data Pembelian</h6>
     </div>
     <div class="card-body">
+        @can('pembelian-create')
         <div class="row ml-0">
             <a href="{{route('pembelian.create')}}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
@@ -53,10 +54,11 @@
                 <span class="text">Tambah Pembelian Baru</span>
             </a>
         </div>
+        @endcan
         <div class="my-4"></div>
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+            <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                <thead class="bg-info text-white">
                     <tr>
                         <th class="text-center" style="width:20px;">No</th>
                         @if(auth()->user()->id_cabang==0)
@@ -68,8 +70,12 @@
                         <th class="text-center" style="width:200px;">Keterangan</th>
                         <th class="text-center">User</th>
                         <th class="text-center" style="width:120px;">Created</th>
+                        @can('pembelian-edit')
                         <th data-orderable="false"></th>
+                        @endcan
+                        @can('pembelian-delete')
                         <th data-orderable="false"></th>
+                        @endcan
                     </tr>
                 </thead>
 
@@ -86,16 +92,20 @@
                         <td>{{$result->keterangan}}</td>
                         <td>{{$result->created_by}}</td>
                         <td>{{$result->created_at}}</td>
+                        @can('pembelian-edit')
                         <td class="text-center">
                             <a href="{{ route('pembelian.edit',['id' => $result->id_pembelian]) }}" class="btn btn-success text-light btb-circle" id="edit-pembelian">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
+                        @endcan
+                        @can('pembelian-delete')
                         <td class="text-center">
                             <a data-id="{!! $result->id_pembelian !!}" data-target="#previewModal-{{ $result->id_pembelian }}" data-toggle="modal" class="btn btn-danger btn-circle">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
+                        @endcan
                         <!-- Modal HTML -->
                         <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_pembelian }}">
                             <div class="modal-dialog">
@@ -157,14 +167,6 @@
             lengthChange: true
         });
     });
-
-
-
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function() {
-            $(this).remove();
-        });
-    }, 5000);
 </script>
 
 @endsection

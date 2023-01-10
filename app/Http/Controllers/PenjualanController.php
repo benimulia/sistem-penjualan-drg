@@ -146,6 +146,7 @@ class PenjualanController extends Controller
                 $stokupdate = $stokproduk - $qty;
                 $update = [
                     'stok' => $stokupdate,
+                    'updated_at' => Carbon::now(),
                     'updated_by' => "penjualan - " . auth()->user()->name,
                 ];
                 PenjualanDetail::create($penjualanDetail);
@@ -199,6 +200,7 @@ class PenjualanController extends Controller
                 $stokupdate = $stokproduk + $id_penjualan_detail->qty;
                 $update = [
                     'stok' => $stokupdate,
+                    'updated_at' => Carbon::now(),
                     'updated_by' => "batal jual - " . auth()->user()->name,
                 ];
 

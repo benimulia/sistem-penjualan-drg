@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <form id="rekapbonForm" class="needs-validation" novalidate action="{{ route('rekapbon.store') }}"
-                method="POST" enctype="multipart/form-data">
+                method="POST" enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 @if (auth()->user()->id_cabang == 0)
                     <div class="form-group">
@@ -77,53 +77,67 @@
                     <input type="hidden" name="id_cabang" value="{{ auth()->user()->id_cabang }}">
                 @endif
 
-                <div class="form-group">
-                    <label for="id_pelanggan">Nama Pelanggan :</label>
-                    <select class="form-control select2" id="id_pelanggan" name="id_pelanggan" required>
-                        <option value="">Pilih Pelanggan</option>
-                        @foreach ($pelanggan as $result)
-                            <option value="{{ $result->id_pelanggan }}">{{ $result->nama_pelanggan }}</option>
-                        @endforeach
-                    </select>
-                    <div class="valid-feedback">
-                        Looks good!
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="id_pelanggan">Nama Pelanggan :</label>
+                            <select class="form-control select2" id="id_pelanggan" name="id_pelanggan" required>
+                                <option value="">Pilih Pelanggan</option>
+                                @foreach ($pelanggan as $result)
+                                    <option value="{{ $result->id_pelanggan }}">{{ $result->nama_pelanggan }}</option>
+                                @endforeach
+                            </select>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill out this field.
+                            </div>
+                        </div>
                     </div>
-                    <div class="invalid-feedback">
-                        Please fill out this field.
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="tgl_bon">Tanggal Bon :</label>
+                            <input class="datepicker form-control px-2" type="text" id="tgl_bon" name="tgl_bon"
+                                placeholder="Masukkan tanggal bon.." required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill out this field.
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="tgl_bon">Tanggal Bon :</label>
-                    <input class="datepicker form-control px-2" type="text" id="tgl_bon" name="tgl_bon"
-                        placeholder="Masukkan tanggal bon.." required>
-                    <div class="valid-feedback">
-                        Looks good!
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="total">Jumlah Bon :</label>
+                            <input class="form-control angka" type="text" id="total" name="total" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill out this field.
+                            </div>
+                        </div>
                     </div>
-                    <div class="invalid-feedback">
-                        Please fill out this field.
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="jumlah_terbayar">Jumlah Terbayar :</label>
+                            <input class="form-control angka" type="text" id="jumlah_terbayar" name="jumlah_terbayar"
+                                required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill out this field.
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="total">Jumlah Bon :</label>
-                    <input class="form-control angka" type="text" id="total" name="total" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please fill out this field.
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="jumlah_terbayar">Jumlah Terbayar :</label>
-                    <input class="form-control angka" type="text" id="jumlah_terbayar" name="jumlah_terbayar" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please fill out this field.
-                    </div>
-                </div>
                 <div class="form-group">
                     <label for="keterangan">Keterangan :</label>
                     <textarea class="form-control" rows="3" id="keterangan" name="keterangan"></textarea>

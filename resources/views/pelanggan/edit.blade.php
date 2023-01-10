@@ -110,7 +110,7 @@
             </div>
 
             <div class="" style="margin-top: 30px;">
-                <a href="{{route('pelanggan.index')}}" class="btn btn-danger mr-2">Cancel</a>
+                <a href="{{route('pelanggan.index')}}" class="btn btn-danger mr-2">Batal</a>
                 <a href="#myModal" id="btnUpdate" data-toggle="modal" class="btn btn-success"
                     style="display: none;">Update </a>
             </div>

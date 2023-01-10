@@ -45,6 +45,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Data Produk</h6>
     </div>
     <div class="card-body">
+        @can('produk-create')
         <div class="row ml-0">
             <a href="{{route('produk.create')}}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
@@ -53,10 +54,11 @@
                 <span class="text">Tambah Produk</span>
             </a>
         </div>
+        @endcan
         <div class="my-4"></div>
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+            <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-dark">
                     <tr>
                         <th class="text-center">No</th>
                         @if(auth()->user()->id_cabang==0)
@@ -70,8 +72,12 @@
                         <th class="text-center">Harga Beli</th>
                         <th class="text-center">Diskon</th>
                         <th class="text-center">Updated By</th>
+                        @can('produk-edit')
                         <th data-orderable="false"></th>
+                        @endcan
+                        @can('produk-delete')
                         <th data-orderable="false"></th>
+                        @endcan
                     </tr>
                 </thead>
 
@@ -90,16 +96,20 @@
                         <td style="min-width:170px">Rp {{number_format($result->harga_beli,0,',','.') }}</td>
                         <td style="min-width:170px">Rp {{number_format($result->diskon,0,',','.') }}</td>
                         <td>{{$result->updated_by}}</td>
+                        @can('produk-edit')
                         <td class="text-center">
                             <a href="{{ route('produk.edit',['id' => $result->id_produk]) }}" class="btn btn-success text-light btb-circle" id="edit-cabang">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
+                        @endcan
+                        @can('produk-delete')
                         <td class="text-center">
                             <a data-id="{!! $result->id_produk !!}" data-target="#previewModal-{{ $result->id_produk }}" data-toggle="modal" class="btn btn-danger btn-circle">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
+                        @endcan
                         <!-- Modal HTML -->
                         <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_produk }}">
                             <div class="modal-dialog">
@@ -160,14 +170,6 @@
             lengthChange: true
         });
     });
-
-
-
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function() {
-            $(this).remove();
-        });
-    }, 5000);
 </script>
 
 @endsection

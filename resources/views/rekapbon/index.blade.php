@@ -46,6 +46,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Data Rekap Bon</h6>
         </div>
         <div class="card-body">
+            @can('rekapbon-create')
             <div class="row ml-0">
                 <a href="{{ route('rekapbon.create') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
@@ -54,10 +55,11 @@
                     <span class="text">Tambah Rekap Bon</span>
                 </a>
             </div>
+            @endcan
             <div class="my-4"></div>
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+                <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead-dark">
                         <tr>
                             <th class="text-center">No</th>
                             @if(auth()->user()->id_cabang==0)
@@ -69,9 +71,13 @@
                             <th class="text-center">Jumlah Terbayar</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Keterangan</th>
-                            <th class="text-center">Updated By</th>
+                            <th class="text-center">Created By</th>
+                            @can('rekapbon-edit')
                             <th data-orderable="false"></th>
+                            @endcan
+                            @can('rekapbon-delete')
                             <th data-orderable="false"></th>
+                            @endcan
                         </tr>
                     </thead>
 
@@ -86,15 +92,18 @@
                                 <td>{{$result->tgl_bon}}</td>
                                 <td>Rp {{ number_format($result->total, 0, ',', '.') }}</td>
                                 <td>Rp {{ number_format($result->jumlah_terbayar, 0, ',', '.') }}</td>
-                                <td>{{$result->status}}</td>
+                                <td><span class="badge rounded-pill {{$result->status == 'Belum Lunas' ? 'bg-warning text-dark' : 'bg-success text-white'}} " >{{$result->status}}</span></td> 
                                 <td>{{$result->keterangan}}</td>
-                                <td>{{ $result->updated_by }}</td>
+                                <td>{{ $result->created_by }}</td>
+                                @can('rekapbon-edit')
                                 <td class="text-center">
                                     <a href="{{ route('rekapbon.edit', ['id' => $result->id_bon]) }}"
                                         class="btn btn-success text-light btb-circle" id="edit-cabang">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>
+                                @endcan
+                                @can('rekapbon-delete')
                                 <td class="text-center">
                                     <a data-id="{!! $result->id_bon !!}"
                                         data-target="#previewModal-{{ $result->id_bon }}" data-toggle="modal"
@@ -102,6 +111,7 @@
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
+                                @endcan
                                 <!-- Modal HTML -->
                                 <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_bon }}">
                                     <div class="modal-dialog">
@@ -164,13 +174,5 @@
                 lengthChange: true
             });
         });
-
-
-
-        window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function() {
-                $(this).remove();
-            });
-        }, 5000);
     </script>
 @endsection

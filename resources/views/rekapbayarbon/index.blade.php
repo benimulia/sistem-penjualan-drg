@@ -56,8 +56,8 @@
             </div>
             <div class="my-4"></div>
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+                <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="bg-info text-white">
                         <tr>
                             <th class="text-center">No</th>
                             @if (auth()->user()->id_cabang == 0)
@@ -165,13 +165,5 @@
                 lengthChange: true
             });
         });
-
-
-
-        window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function() {
-                $(this).remove();
-            });
-        }, 5000);
     </script>
 @endsection

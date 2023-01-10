@@ -160,19 +160,35 @@ class RekapBayarBonController extends Controller
     {
         DB::beginTransaction();
         try {
+            
+            $rekapbayarbon = RekapBayarBon::where('id_bayar_bon', $id)->first();
+            $rekapbon = RekapBon::where('id_bon', $rekapbayarbon->id_bon)->first();
+
+            $update = [
+                'status_transaksi' => "Belum Lunas",
+                'updated_at' => Carbon::now(),
+                'updated_by' => "hapus bayar bon - " . auth()->user()->name,
+            ];
+
+            $jumlahterbayar = (int) $rekapbon->jumlah_terbayar;
+            $jumlahcicil = (int) $rekapbayarbon->jumlah_cicil;
+            $updatejumlahterbayar = $jumlahterbayar - $jumlahcicil;
+
+            $updaterekapbon = [
+                'status' => "Belum Lunas",
+                'jumlah_terbayar' => $updatejumlahterbayar,
+                'updated_at' => Carbon::now(),
+                'updated_by' => "hapus bayar bon - " . auth()->user()->name,
+            ];
+
+            Penjualan::where('id_penjualan', $rekapbon->id_penjualan)->update($update);
+            RekapBon::where('id_bon', $rekapbayarbon->id_bon)->update($updaterekapbon);
 
             /** delete record table rekap_bayar_bon */
-            $rekapbayarbon = DB::table('rekap_bayar_bon')->where('id_bon', $id)->get();
-            foreach ($rekapbayarbon as $id_rekap_bayar_bon) {
-                DB::table('rekap_bayar_bon')->where('id_rekap_bayar_bon', $id_rekap_bayar_bon->id_rekap_bayar_bon)->delete();
-            }
-
-            /** delete record table rekap_bon */
-            RekapBon::destroy($id);
+            RekapBayarBon::destroy($id);
 
             DB::commit();
             return redirect()->back()->with('success', 'Berhasil menghapus data');
-
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->with('fail', 'Gagal menghapus data. Silahkan coba lagi');

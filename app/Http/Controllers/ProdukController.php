@@ -57,22 +57,27 @@ class ProdukController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         try {
             $stokString = $request->stok;
             $stokString = str_replace(array('.', ','), array('', '.'), $stokString);
             $stok = floatval($stokString);
 
+            $hargacash = str_replace(".", "", $request->harga_cash);
+            $hargabon = str_replace(".", "", $request->harga_bon);
+            $hargabeli = str_replace(".", "", $request->harga_beli);
+            $diskon = str_replace(".", "", $request->diskon);
+
             Produk::create([
                 'id_cabang' => $request->id_cabang,
                 'nama_produk' => $request->nama_produk,
                 'stok' => $stok,
                 'satuan' => $request->satuan,
-                'harga_cash' => $request->harga_cash,
-                'harga_bon' => $request->harga_bon,
-                'harga_beli' => $request->harga_beli,
-                'diskon' => $request->diskon,
+                'harga_cash' => $hargacash,
+                'harga_bon' => $hargabon,
+                'harga_beli' => $hargabeli,
+                'diskon' => $diskon,
                 'created_by' => auth()->user()->name,
                 'updated_by' => auth()->user()->name,
             ]);
@@ -93,14 +98,20 @@ class ProdukController extends Controller
     public function update($id, Request $request)
     {
         try {
+
+            $hargacash = str_replace(".", "", $request->harga_cash);
+            $hargabon = str_replace(".", "", $request->harga_bon);
+            $hargabeli = str_replace(".", "", $request->harga_beli);
+            $diskon = str_replace(".", "", $request->diskon);
+
             DB::table('produk')->where('id_produk', $id)->update([
                 'id_cabang' => $request->id_cabang,
                 'nama_produk' => $request->nama_produk,
                 'satuan' => $request->satuan,
-                'harga_cash' => $request->harga_cash,
-                'harga_bon' => $request->harga_bon,
-                'harga_beli' => $request->harga_beli,
-                'diskon' => $request->diskon,
+                'harga_cash' => $hargacash,
+                'harga_bon' => $hargabon,
+                'harga_beli' => $hargabeli,
+                'diskon' => $diskon,
                 'updated_at' => Carbon::now(),
                 'updated_by' => auth()->user()->name,
             ]);

@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <form id="produkForm" class="needs-validation" novalidate action="{{ route('produk.store') }}" method="POST"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 @if (auth()->user()->id_cabang == 0)
                     <div class="form-group">
@@ -122,8 +122,8 @@
                 </div>
                 <div class="form-group">
                     <label for="harga_cash">Harga Cash :</label>
-                    <input type="number" class="form-control" id="harga_cash" placeholder="Masukkan harga cash produk.."
-                        name="harga_cash" required onkeypress='validateInt(event)'>
+                    <input type="text" class="form-control angka" id="harga_cash"
+                        placeholder="Masukkan harga cash produk.." name="harga_cash" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -133,8 +133,8 @@
                 </div>
                 <div class="form-group">
                     <label for="harga_bon">Harga Bon :</label>
-                    <input type="number" class="form-control" id="harga_bon" placeholder="Masukkan harga bon produk.."
-                        name="harga_bon" required onkeypress='validateInt(event)'>
+                    <input type="text" class="form-control angka" id="harga_bon"
+                        placeholder="Masukkan harga bon produk.." name="harga_bon" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -144,9 +144,8 @@
                 </div>
                 <div class="form-group">
                     <label for="harga_beli">Harga Beli :</label>
-                    <input type="number" class="form-control" id="harga_beli"
-                        placeholder="Masukkan harga beli produk.." name="harga_beli" required
-                        onkeypress='validateInt(event)'>
+                    <input type="text" class="form-control angka" id="harga_beli"
+                        placeholder="Masukkan harga beli produk.." name="harga_beli" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -156,8 +155,8 @@
                 </div>
                 <div class="form-group">
                     <label for="diskon">Diskon :</label>
-                    <input type="number" class="form-control" id="diskon" placeholder="Masukkan diskon produk.."
-                        name="diskon" required onkeypress='validateInt(event)'>
+                    <input type="text" class="form-control angka" id="diskon"
+                        placeholder="Masukkan diskon produk.." name="diskon" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -234,22 +233,24 @@
             return true;
         });
 
-        function validateInt(evt) {
-            var theEvent = evt || window.event;
-
-            // Handle paste
-            if (theEvent.type === 'paste') {
-                key = event.clipboardData.getData('text/plain');
-            } else {
-                // Handle key press
-                var key = theEvent.keyCode || theEvent.which;
-                key = String.fromCharCode(key);
+        $(".angka").on("keyup", function(event) {
+            // When user select text in the document, also abort.
+            var selection = window.getSelection().toString();
+            if (selection !== '') {
+                return;
             }
-            var regex = /[0-9]|\./;
-            if (!regex.test(key)) {
-                theEvent.returnValue = false;
-                if (theEvent.preventDefault) theEvent.preventDefault();
+            // When the arrow keys are pressed, abort.
+            if ($.inArray(event.keyCode, [38, 40, 37, 39]) !== -1) {
+                return;
             }
-        }
+            var $this = $(this);
+            // Get the value.
+            var input = $this.val();
+            input = input.replace(/[\D\s\._\-]+/g, "");
+            input = input ? parseInt(input, 10) : 0;
+            $this.val(function() {
+                return (input === 0) ? "0" : input.toLocaleString("id-ID");
+            });
+        });
     </script>
 @endsection

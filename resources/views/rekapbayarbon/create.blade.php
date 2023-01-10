@@ -36,7 +36,7 @@
         </div>
     @endif
 
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-sm-12 col-md-12">
             <div class="pull-left">
                 <h2>Bayar Bon</h2>
@@ -51,10 +51,18 @@
         </div>
     </div>
 
+    <div class="row mb-2">
+        <div class="col-sm-12 col-md-12">
+            <div class="pull-left">
+                <h5><span class="badge badge-warning text-dark p-3"># SISA BON : Rp {{  number_format($rekapbon->total - $rekapbon->jumlah_terbayar, 0, ',', '.') }}</span></h5>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <form id="rekapbayarbonForm" class="needs-validation" novalidate action="{{ route('rekapbayarbon.store', ['id' => $rekapbon->id_bon]) }}"
-                method="POST" enctype="multipart/form-data">
+                method="POST" enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 <div class="form-group">
                     <label for="tgl_bayar">Tanggal Bayar Bon :</label>

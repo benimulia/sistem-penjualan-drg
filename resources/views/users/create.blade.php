@@ -64,7 +64,12 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Cabang:</strong>
-                {!! Form::select('cabang[]', $cabang, [], ['class' => 'form-control', 'multiple']) !!}
+                <select class="form-control" id="id_cabang" name="id_cabang" required>
+                    <option value="">Pilih Cabang</option>
+                    @foreach ($cabang as $result)
+                        <option value="{{ $result->id_cabang }}">{{ $result->nama_cabang }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">

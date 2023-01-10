@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Penjualan;
+use App\Models\RekapBayarBon;
 use Carbon\Carbon;
 use Exception;
 use App\Models\Cabang;
@@ -51,8 +53,9 @@ class RekapBonController extends Controller
         $rekapbon = RekapBon::with('penjualan')->find($id);
         $cabang = Cabang::all();
         $pelanggan = Pelanggan::orderBy('nama_pelanggan', 'ASC')->get();
+        $rekapbayarbon = RekapBayarBon::where('id_bon', $id)->orderBy('tgl_bayar','ASC')->get();
 
-        return view('rekapbon.edit', compact('rekapbon', 'cabang','pelanggan'), [
+        return view('rekapbon.edit', compact('rekapbon', 'cabang','pelanggan','rekapbayarbon'), [
             "title" => "Lihat Rekap Bon"
         ]);
     }
@@ -120,7 +123,7 @@ class RekapBonController extends Controller
                 'updated_at' => Carbon::now(),
                 'updated_by' => auth()->user()->name,
             ]);
-            return redirect()->route('rekapbon.index')->with('success', 'Berhasil mengedit data');
+            return redirect()->route('rekapbon.edit',['id' => $id])->with('success', 'Berhasil mengedit data');
         } catch (Exception $e) {
             return redirect()->back()->with('fail', 'Gagal mengedit data. Silahkan coba lagi');
         }
@@ -130,16 +133,24 @@ class RekapBonController extends Controller
     {
         DB::beginTransaction();
         try {
+            
+            $rekapbon = RekapBon::where('id_bon', $id)->first();
+
+            $update = [
+                'status_transaksi' => "Belum Lunas",
+                'updated_at' => Carbon::now(),
+                'updated_by' => "hapus bon - " . auth()->user()->name,
+            ];
+
+            Penjualan::where('id_penjualan', $rekapbon->id_penjualan)->update($update);
 
             /** delete record table rekap_bayar_bon */
             DB::table('rekap_bayar_bon')->where('id_bon', $id)->delete();
-
-            /** delete record table rekap_bon */
+            /** delete record table penjualan */
             RekapBon::destroy($id);
 
             DB::commit();
             return redirect()->back()->with('success', 'Berhasil menghapus data');
-
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->with('fail', 'Gagal menghapus data. Silahkan coba lagi');

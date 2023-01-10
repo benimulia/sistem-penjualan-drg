@@ -45,6 +45,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Data Pelanggan</h6>
     </div>
     <div class="card-body">
+        @can('pelanggan-create')
         <div class="row ml-0">
             <a href="{{route('pelanggan.create')}}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
@@ -53,17 +54,22 @@
                 <span class="text">Tambah Pelanggan</span>
             </a>
         </div>
+        @endcan
         <div class="my-4"></div>
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+            <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-dark">
                     <tr>
                         <th class="text-center">No</th>
                         <th class="text-center">Nama</th>
                         <th class="text-center">HP</th>
                         <th class="text-center">Foto</th>
+                        @can('pelanggan-edit')
                         <th data-orderable="false"></th>
+                        @endcan
+                        @can('pelanggan-delete')
                         <th data-orderable="false"></th>
+                        @endcan
                     </tr>
                 </thead>
 
@@ -74,16 +80,20 @@
                         <td>{{\Illuminate\Support\Str::limit( html_entity_decode(strip_tags($result->nama_pelanggan)), 50 )}}</td>
                         <td>{{$result->no_hp}}</td>
                         <td><img src="{{ asset('gambar/pelanggan/foto-pelanggan/'.$result->foto_pelanggan) }}" style="max-height: 160px;" ></td>
+                        @can('pelanggan-edit')
                         <td class="text-center">
                             <a href="{{ route('pelanggan.edit',['id' => $result->id_pelanggan]) }}" class="btn btn-success text-light btb-circle" id="edit-pelanggan">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
+                        @endcan
+                        @can('pelanggan-delete')
                         <td class="text-center">
                             <a data-id="{!! $result->id_pelanggan !!}" data-target="#previewModal-{{ $result->id_pelanggan }}" data-toggle="modal" class="btn btn-danger btn-circle">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
+                        @endcan
                         <!-- Modal HTML -->
                         <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_pelanggan }}">
                             <div class="modal-dialog">
@@ -144,14 +154,6 @@
             lengthChange: true
         });
     });
-
-
-
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function() {
-            $(this).remove();
-        });
-    }, 5000);
 </script>
 
 @endsection

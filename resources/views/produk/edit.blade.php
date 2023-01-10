@@ -100,8 +100,7 @@
                 <div class="form-group">
                     <label for="stok">Stok :</label>
                     <input type="number" class="form-control" id="stok" placeholder="Masukkan stok produk.."
-                        name="stok" required onkeypress='validateInt(event)' value="{{ $produk->stok }}"
-                        disabled=true>
+                        name="stok" required onkeypress='validateInt(event)' value="{{ $produk->stok }}" disabled=true>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -132,9 +131,9 @@
                 </div>
                 <div class="form-group">
                     <label for="harga_cash">Harga Cash :</label>
-                    <input type="number" class="form-control" id="harga_cash"
+                    <input type="text" class="form-control angka" id="harga_cash"
                         placeholder="Masukkan harga cash produk.." name="harga_cash" required
-                        onkeypress='validateInt(event)' value="{{ $produk->harga_cash }}" disabled=true>
+                        value="{{number_format($produk->harga_cash,0,',','.') }}" disabled=true>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -144,9 +143,9 @@
                 </div>
                 <div class="form-group">
                     <label for="harga_bon">Harga Bon :</label>
-                    <input type="number" class="form-control" id="harga_bon" placeholder="Masukkan harga bon produk.."
-                        name="harga_bon" required onkeypress='validateInt(event)' value="{{ $produk->harga_bon }}"
-                        disabled=true>
+                    <input type="text" class="form-control angka" id="harga_bon"
+                        placeholder="Masukkan harga bon produk.." name="harga_bon" required
+                        value="{{number_format($produk->harga_bon,0,',','.') }}" disabled=true>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -156,9 +155,9 @@
                 </div>
                 <div class="form-group">
                     <label for="harga_beli">Harga Beli :</label>
-                    <input type="number" class="form-control" id="harga_beli"
+                    <input type="text" class="form-control angka" id="harga_beli"
                         placeholder="Masukkan harga beli produk.." name="harga_beli" required
-                        onkeypress='validateInt(event)' value="{{ $produk->harga_beli }}" disabled=true>
+                        value="{{number_format($produk->harga_beli,0,',','.') }}" disabled=true>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -168,8 +167,8 @@
                 </div>
                 <div class="form-group">
                     <label for="diskon">Diskon :</label>
-                    <input type="number" class="form-control" id="diskon" placeholder="Masukkan diskon produk.."
-                        name="diskon" required onkeypress='validateInt(event)' value="{{ $produk->diskon }}"
+                    <input type="text" class="form-control angka" id="diskon"
+                        placeholder="Masukkan diskon produk.." name="diskon" required value="{{number_format($produk->diskon,0,',','.') }}"
                         disabled=true>
                     <div class="valid-feedback">
                         Looks good!
@@ -179,7 +178,7 @@
                     </div>
                 </div>
                 <div class="">
-                    <a href="{{ route('produk.index') }}" class="btn btn-danger mr-2">Cancel</a>
+                    <a href="" style="display: none;" class="btn btn-danger mr-2" id="btnBatal">Batal</a>
                     <a href="#myModal" id="btnUpdate" data-toggle="modal" class="btn btn-success"
                         style="display: none;">Update </a>
 
@@ -259,23 +258,25 @@
             }, false);
         })();
 
-        function validateInt(evt) {
-            var theEvent = evt || window.event;
-
-            // Handle paste
-            if (theEvent.type === 'paste') {
-                key = event.clipboardData.getData('text/plain');
-            } else {
-                // Handle key press
-                var key = theEvent.keyCode || theEvent.which;
-                key = String.fromCharCode(key);
+        $(".angka").on("keyup", function(event) {
+            // When user select text in the document, also abort.
+            var selection = window.getSelection().toString();
+            if (selection !== '') {
+                return;
             }
-            var regex = /[0-9]|\./;
-            if (!regex.test(key)) {
-                theEvent.returnValue = false;
-                if (theEvent.preventDefault) theEvent.preventDefault();
+            // When the arrow keys are pressed, abort.
+            if ($.inArray(event.keyCode, [38, 40, 37, 39]) !== -1) {
+                return;
             }
-        }
+            var $this = $(this);
+            // Get the value.
+            var input = $this.val();
+            input = input.replace(/[\D\s\._\-]+/g, "");
+            input = input ? parseInt(input, 10) : 0;
+            $this.val(function() {
+                return (input === 0) ? "0" : input.toLocaleString("id-ID");
+            });
+        });
 
         function enableInput() {
             var inputs = document.getElementsByClassName('form-control');
@@ -283,6 +284,7 @@
                 inputs[i].disabled = false;
             }
             $("#btnUpdate").css("display", "");
+            $("#btnBatal").css("display", "");
             $("#btnEnableEdit").css("display", "none");
         }
     </script>

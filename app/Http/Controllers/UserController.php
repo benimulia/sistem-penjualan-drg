@@ -44,7 +44,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::pluck('name','name')->all();
-        $cabang = Cabang::orderBy('nama_cabang', 'ASC')->pluck('nama_cabang','nama_cabang');
+        $cabang = Cabang::orderBy('nama_cabang', 'ASC')->get();
         return view('users.create',compact('roles','cabang'),[
             "title" => "Tambah User"
         ]);

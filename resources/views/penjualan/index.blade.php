@@ -45,6 +45,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Data Penjualan</h6>
     </div>
     <div class="card-body">
+        @can('penjualan-create')
         <div class="row ml-0">
             <a href="{{route('penjualan.create')}}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
@@ -53,10 +54,11 @@
                 <span class="text">Tambah Penjualan Baru</span>
             </a>
         </div>
+        @endcan
         <div class="my-4"></div>
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+            <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                <thead class="bg-info text-white">
                     <tr>
                         <th class="text-center" style="width:20px;">No</th>
                         @if(auth()->user()->id_cabang==0)
@@ -67,8 +69,12 @@
                         <th class="text-center" style="width:80px;">Status</th>
                         <th class="text-center" style="width:200px;">Keterangan</th>
                         <th class="text-center">User</th>
+                        @can('penjualan-edit')
                         <th data-orderable="false"></th>
+                        @endcan
+                        @can('penjualan-delete')
                         <th data-orderable="false"></th>
+                        @endcan
                     </tr>
                 </thead>
 
@@ -84,16 +90,20 @@
                         <td style="min-width:80px">{{$result->status_transaksi}}</td>
                         <td style="min-width:200px">{{$result->keterangan}}</td>
                         <td>{{$result->created_by}}</td>
+                        @can('penjualan-edit')
                         <td class="text-center">
                             <a href="{{ route('penjualan.edit',['id' => $result->id_penjualan]) }}" class="btn btn-success text-light btb-circle" id="edit-penjualan">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
+                        @endcan
+                        @can('penjualan-delete')
                         <td class="text-center">
                             <a data-id="{!! $result->id_penjualan !!}" data-target="#previewModal-{{ $result->id_penjualan }}" data-toggle="modal" class="btn btn-danger btn-circle">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
+                        @endcan
                         <!-- Modal HTML -->
                         <div class="modal fade" tabindex="-1" id="previewModal-{{ $result->id_penjualan }}">
                             <div class="modal-dialog">
@@ -155,14 +165,6 @@
             lengthChange: true
         });
     });
-
-
-
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function() {
-            $(this).remove();
-        });
-    }, 5000);
 </script>
 
 @endsection
